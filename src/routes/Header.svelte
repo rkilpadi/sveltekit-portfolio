@@ -1,41 +1,68 @@
 <script>
+	import { onMount } from 'svelte';
+	import { slide } from 'svelte/transition';
 	import { page } from '$app/stores';
-	import logo from '$lib/images/svelte-logo.svg';
-	import github from '$lib/images/github.svg';
+	import { goto } from '$app/navigation';
+
+	const routes = ['/', '/work', '/background', '/contact'];
+	let pageIdx = 0;
+
+	const navTransition = { duration: 1000, axis: 'y' }
+	let y;
+
+	function handleArrowNavigation(event) {
+		switch (event.key) {
+			case 'ArrowRight':
+				pageIdx = (pageIdx + 1) % routes.length;
+				break;
+			case 'ArrowLeft':
+				pageIdx = pageIdx === 0 ? routes.length - 1 : pageIdx - 1;
+				break;
+			default: return;
+		}
+		goto(routes[pageIdx]);
+	}
+
+	let ready = false;
+	onMount(() => {
+		ready = true;
+		for (let i = 0; i < routes.length; i++) {
+			if (routes[i] === $page.url.pathname) {
+				pageIdx = i;
+			}
+		}
+	});
 </script>
 
+<svelte:window on:keydown={handleArrowNavigation} bind:scrollY={y} />
+
+<svelte:head>
+    <meta charset="UTF-8">
+	<title>Ryan Kilpadi</title>
+</svelte:head>
+
 <header>
-	<div class="corner">
-		<a href="https://kit.svelte.dev">
-			<img src={logo} alt="SvelteKit" />
-		</a>
-	</div>
+	
+	{#if ready && y < 50}
+		<nav in:slide="{navTransition}">
+			<svg viewBox="0 0 2 3" aria-hidden="true">
+				<path d="M0,0 L1,2 C1.5,3 1.5,3 2,3 L2,0 Z" />
+			</svg>
+			<ul>
+				{#each routes as route, i}
+					<li aria-current={$page.url.pathname === '/' || pageIdx === i}>
+						<a href={route} on:click={() => pageIdx = i}>
+							{route === '/' ? 'home' : route.slice(1)}
+						</a>
+					</li>
+				{/each}
+			</ul>
+			<svg viewBox="0 0 2 3" aria-hidden="true">
+				<path d="M0,0 L0,3 C0.5,3 0.5,3 1,2 L2,0 Z" />
+			</svg>
+		</nav>
+	{/if}
 
-	<nav>
-		<svg viewBox="0 0 2 3" aria-hidden="true">
-			<path d="M0,0 L1,2 C1.5,3 1.5,3 2,3 L2,0 Z" />
-		</svg>
-		<ul>
-			<li aria-current={$page.url.pathname === '/' ? 'page' : undefined}>
-				<a href="/">Home</a>
-			</li>
-			<li aria-current={$page.url.pathname === '/about' ? 'page' : undefined}>
-				<a href="/about">About</a>
-			</li>
-			<li aria-current={$page.url.pathname.startsWith('/sverdle') ? 'page' : undefined}>
-				<a href="/sverdle">Sverdle</a>
-			</li>
-		</ul>
-		<svg viewBox="0 0 2 3" aria-hidden="true">
-			<path d="M0,0 L0,3 C0.5,3 0.5,3 1,2 L2,0 Z" />
-		</svg>
-	</nav>
-
-	<div class="corner">
-		<a href="https://github.com/sveltejs/kit">
-			<img src={github} alt="GitHub" />
-		</a>
-	</div>
 </header>
 
 <style>
@@ -44,29 +71,12 @@
 		justify-content: space-between;
 	}
 
-	.corner {
-		width: 3em;
-		height: 3em;
-	}
-
-	.corner a {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		width: 100%;
-		height: 100%;
-	}
-
-	.corner img {
-		width: 2em;
-		height: 2em;
-		object-fit: contain;
-	}
-
 	nav {
 		display: flex;
 		justify-content: center;
-		--background: rgba(255, 255, 255, 0.7);
+		width: 100vw;
+		--background: var(--color-primary);
+		position: fixed;
 	}
 
 	svg {
@@ -76,7 +86,7 @@
 	}
 
 	path {
-		fill: var(--background);
+		fill: var(--color-primary);
 	}
 
 	ul {
@@ -88,7 +98,7 @@
 		justify-content: center;
 		align-items: center;
 		list-style: none;
-		background: var(--background);
+		background: var(--color-primary);
 		background-size: contain;
 	}
 
@@ -106,7 +116,7 @@
 		top: 0;
 		left: calc(50% - var(--size));
 		border: var(--size) solid transparent;
-		border-top: var(--size) solid var(--color-theme-1);
+		border-top: var(--size) solid var(--background-color);
 	}
 
 	nav a {
@@ -114,7 +124,7 @@
 		height: 100%;
 		align-items: center;
 		padding: 0 0.5rem;
-		color: var(--color-text);
+		color: var(--color-secondary);
 		font-weight: 700;
 		font-size: 0.8rem;
 		text-transform: uppercase;
@@ -124,6 +134,6 @@
 	}
 
 	a:hover {
-		color: var(--color-theme-1);
+		color: var(--background-color);
 	}
 </style>

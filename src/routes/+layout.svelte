@@ -1,32 +1,32 @@
 <script>
-	import { browser } from '$app/environment';
-	import { page } from '$app/stores';
-	import { webVitals } from '$lib/vitals';
+	import './app.css';
 	import Header from './Header.svelte';
-	import './styles.css';
+	import Sketch from './Sketch.svelte';
+    import Footer from './Footer.svelte';
+	import { fade } from 'svelte/transition';
+	import { cubicIn } from 'svelte/easing';
 
-	/** @type {import('./$types').LayoutServerData} */
+	export const prerender = true;
 	export let data;
-
-	$: if (browser && data?.analyticsId) {
-		webVitals({
-			path: $page.url.pathname,
-			params: $page.params,
-			analyticsId: data.analyticsId
-		});
-	}
+	
 </script>
 
-<div class="app">
+<div class="app" >
+	<div id="sketch">
+		<Sketch />
+	</div>
+	
 	<Header />
 
 	<main>
-		<slot />
+		{#key data.pathname}
+			<div in:fade={{ duration: 300, easing: cubicIn }}>
+				<slot/>
+			</div>
+		{/key}
 	</main>
 
-	<footer>
-		<p>visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to learn SvelteKit</p>
-	</footer>
+	<Footer />
 </div>
 
 <style>
@@ -41,27 +41,23 @@
 		display: flex;
 		flex-direction: column;
 		padding: 1rem;
+		padding-top: 10vh;
 		width: 100%;
 		max-width: 64rem;
 		margin: 0 auto;
 		box-sizing: border-box;
 	}
 
-	footer {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		padding: 12px;
+	#sketch {
+		position: fixed !important;
+		top: 0;
+		left: 0;
+		z-index: -1;
+		animation: fadein 2s;	
 	}
 
-	footer a {
-		font-weight: bold;
-	}
-
-	@media (min-width: 480px) {
-		footer {
-			padding: 12px 0;
-		}
+	@keyframes fadein {
+		from { opacity: 0; }
+		to   { opacity: 1; }
 	}
 </style>
