@@ -3,47 +3,101 @@
 
 	const maxRepel = 500;
 	const maxParticles = 10000;
-
+	const maxNoise = 50;
+	const maxStrokeWeight = 15;
 </script>
 
-<svelte:head>
-	<title>About</title>
-	<meta name="description" content="About this app" />
-</svelte:head>
-
 <div class="text-column">
-	<h1>About this app</h1>
+	<h1>Background</h1>
 
+	<div class="card">
+	<p>Hi again, I'm Ryan!</p>
 	<p>
-		This is a <a href="https://kit.svelte.dev">SvelteKit</a> app. You can make your own by typing the
-		following into your command line and following the prompts:
+		I'm a student software engineer passionate about using technology to build things. That includes this website, built with SvelteKit, Vite, and Vercel.
+		I'm currently completing my undergrad at Vassar College studying mathematics and computer science.
+		I interned at Amazon Web Services for the past two summers, working in the High Performance Computing division.
 	</p>
 
-	<pre>npm create svelte@latest</pre>
-
 	<p>
-		The page you're looking at is purely static HTML, with no client-side interactivity needed.
-		Because of that, we don't need to load any JavaScript. Try viewing the page's source, or opening
-		the devtools network panel and reloading.
+		The background of this website is a <a href="https://en.wikipedia.org/wiki/Perlin_noise">Perlin noise</a> simulation built in p5.js.
+		Feel free to adjust the settings below, but I can't guarentee your computer will like it.
 	</p>
 
-	<button class="button" on:click={() => $p5Settings.repel = !$p5Settings.repel}>repel</button>
+	<!-- <button class="button" on:click={() => $p5Settings.repel = !$p5Settings.repel}>repel</button>
 	
-	<!-- <button class="button" on:click={() => $p5Settings.playing = !$p5Settings.playing}>pause</button> -->
-
 	<input
 		type="range"
 		min=0
 		max={maxRepel}
 		bind:value={$p5Settings.repelDistance}
 		name=force
-	/>
+	/> -->
+	
+	<div class="sliders">
+	<label> Particle Count
+		<input
+			type="range"
+			min=0
+			max={maxParticles}
+			bind:value={$p5Settings.particleCount}
+			name="force"
+		/>
+	</label>
 
-	<input
-		type="range"
-		min=0
-		max={maxParticles}
-		bind:value={$p5Settings.particleCount}
-		name="force"
-	/>
+	<label> Particle Size
+		<input 
+			type="range"
+			min=1
+			max={maxStrokeWeight}
+			bind:value={$p5Settings.strokeWeight}
+			name="strokeWeight"
+		/>
+	</label>
+
+	<label> Noise
+		<input
+			type="range"
+			min=0
+			max={maxNoise}
+			bind:value={$p5Settings.noise}
+			name="noiseScale"
+		/>
+	</label>
+	</div>
+	</div>
 </div>
+
+<style>
+	.card {
+        border: 1px solid var(--color-primary);
+        border-radius: 5px;
+        backdrop-filter: blur(5px);
+        padding: 20px;
+        margin-bottom: 20px;
+        text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+        transition: 0.3s;
+    }
+
+	.text-column {
+		top: 30%;
+	}
+
+	h1,
+	p {
+		text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+	}
+
+	h1 {
+		color: var(--color-primary);
+	}
+
+	input {
+		accent-color: var(--color-primary);
+	}
+
+	.sliders {
+		display: flex;
+		justify-content: space-between;
+		text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+	}
+</style>

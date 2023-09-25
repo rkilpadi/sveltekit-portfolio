@@ -5,4 +5,6 @@ export const p5Settings = writable({
     repel: false,
     repelDistance: 50,
     particleCount: 2000,
+    noise: 5,
+    strokeWeight: 1,
 });

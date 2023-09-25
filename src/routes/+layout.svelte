@@ -6,7 +6,6 @@
 	import { fade } from 'svelte/transition';
 	import { cubicIn } from 'svelte/easing';
 
-	export const prerender = true;
 	export let data;
 	
 </script>

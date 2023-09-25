@@ -1,13 +1,16 @@
 <script>
+    import { slide, fade } from 'svelte/transition';
     export let location;
     export let date;
     export let company;
     export let position;
     export let image;
     export let bullets = [];
+
+    let expanded = false;
   </script>
 
-<div class="work-card">
+<div class="work-card" on:click={() => expanded = !expanded}>
     <div class="corner">
         {#if image}
             <img src={image} alt='' width="70">
@@ -16,9 +19,15 @@
     <h3>{location} | {date}</h3>
     <h2>{company}</h2>
     <h3>{position}</h3>
-    {#each bullets as bullet}
-        <p>• {bullet}</p>
-    {/each}
+    {#if expanded}
+        <div in:slide out:slide>
+            {#each bullets as bullet}
+                <p>• {bullet}</p>
+            {/each}
+        </div>
+    {:else if bullets.length > 0}
+        <i class="arrow" out:fade in:fade></i>
+    {/if}
 </div>
 
 <style>
@@ -48,7 +57,11 @@
     }
 
     .work-card:hover {
-        transform: scale(1.01);
+        transform: scale(1.03);
+    }
+
+    .work-card:hover .arrow {
+        animation: bounce 1s infinite;
     }
 
     .corner {
@@ -57,8 +70,26 @@
         right: 30px;
     }
 
+    .arrow {
+        border: solid var(--color-secondary);
+        border-width: 0 3px 3px 0;
+        display: inline-block;
+        padding: 3px;
+        transform: rotate(45deg);
+        -webkit-transform: rotate(45deg);
+        text-align: center;
+        position: absolute;
+        bottom: 20px;
+        left: 95%;
+    }
+
     @keyframes scale {
         from { transform: scale(1); }
         to { transform: scale(1.5); }
+    }
+
+    @keyframes bounce {
+        0%, 100% { transform: translateY(0) rotate(45deg); }
+        50% { transform: translateY(-5px) rotate(45deg); }
     }
 </style>

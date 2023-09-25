@@ -3,9 +3,8 @@
     import { p5Settings } from '$lib/stores.js';
 
     let particles = [];
-    const num = 2000;
-    const noiseScale = 0.01 / 2;
-    $: ({ playing, repel, repelDistance, particleCount } = $p5Settings); 
+    $: ({ playing, repel, repelDistance, particleCount, noise, strokeWeight } = $p5Settings); 
+    $: noiseScale = noise/1000;
 
     const sketch = (p5) => {
 
@@ -15,11 +14,12 @@
                 particles.push(p5.createVector(p5.random(p5.width), p5.random(p5.height)));
             }
 
-            p5.strokeWeight(1);
             p5.stroke("lightseagreen");
         };
 
          p5.draw = () => {
+            p5.strokeWeight(strokeWeight);
+            
             p5.background(35, 30, 50, 10);
             for (let i = 0; i < particleCount; i++) {
                 if (i > particles.length-1) {
@@ -30,7 +30,6 @@
 
                 let mouseToParticle = p5.createVector(p.x - p5.mouseX, p.y - p5.mouseY);
                 let distance = mouseToParticle.mag();
-
                 if (repel && distance < repelDistance) {
                     let repelForce = p5.map(distance, 0, repelDistance, 5, 0);
                     mouseToParticle.setMag(repelForce);

@@ -50,7 +50,7 @@
 			</svg>
 			<ul>
 				{#each routes as route, i}
-					<li aria-current={$page.url.pathname === '/' || pageIdx === i}>
+					<li class:current-section={pageIdx === i}>
 						<a href={route} on:click={() => pageIdx = i}>
 							{route === '/' ? 'home' : route.slice(1)}
 						</a>
@@ -89,6 +89,10 @@
 		fill: var(--color-primary);
 	}
 
+	.current-section a {
+    	color: var(--background-color);
+  	}
+
 	ul {
 		position: relative;
 		padding: 0;
@@ -105,18 +109,6 @@
 	li {
 		position: relative;
 		height: 100%;
-	}
-
-	li[aria-current='page']::before {
-		--size: 6px;
-		content: '';
-		width: 0;
-		height: 0;
-		position: absolute;
-		top: 0;
-		left: calc(50% - var(--size));
-		border: var(--size) solid transparent;
-		border-top: var(--size) solid var(--background-color);
 	}
 
 	nav a {
