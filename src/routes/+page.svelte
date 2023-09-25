@@ -65,10 +65,6 @@
 	});
 </script>
 
-<svelte:head>
-	<title>Home</title>
-</svelte:head>
-
 <div id="title-block">
 	<p id="hi-text">{hiText}
 	  {#if hiText !== hiBase}
@@ -132,10 +128,6 @@
 		width: 3px;
 		animation: blink 1s steps(1) infinite;
 		animation-play-state: paused;
-	}
-
-	#name-cursor {
-		background-color: var(--color-secondary);
 	}
 
 	@keyframes blink {

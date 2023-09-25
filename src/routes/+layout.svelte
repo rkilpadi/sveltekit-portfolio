@@ -2,7 +2,6 @@
 	import './app.css';
 	import Header from './Header.svelte';
 	import Sketch from './Sketch.svelte';
-    import Footer from './Footer.svelte';
 	import { fade } from 'svelte/transition';
 	import { cubicIn } from 'svelte/easing';
 
@@ -24,8 +23,6 @@
 			</div>
 		{/key}
 	</main>
-
-	<Footer />
 </div>
 
 <style>
