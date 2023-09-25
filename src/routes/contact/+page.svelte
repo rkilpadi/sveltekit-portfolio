@@ -26,6 +26,11 @@
 	main {
     display: flex;
     justify-content: flex-start;
+    color: var(--color-secondary);
+  }
+
+  h1 {
+    color: var(--color-primary);
   }
 
   form {
@@ -66,10 +71,10 @@
   }
 
   #button-container {
-	width: 90%;
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: space-between;
+    width: 90%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
   }
 </style>
