@@ -35,7 +35,7 @@ export const experiences = [
         location: "Poughkeepsie, NY",
         date: "August 2023 - Present",
         company: "Vassar College",
-        position: "Linear Algebra Teaching Assistant | Mathematics Department",
+        position: "Linear Algebra Grading Assistant | Mathematics Department",
         image: vassar,
     },
     {

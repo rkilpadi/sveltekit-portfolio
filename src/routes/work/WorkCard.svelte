@@ -16,11 +16,11 @@
             <img src={image} alt='' width="70">
         {/if}
     </div>
-    <h3>{location} | {date}</h3>
+    <h3 class="top-info">{location} | {date}</h3>
     <h2>{company}</h2>
-    <h3>{position}</h3>
+    <h3 class="bottom-info">{position}</h3>
     {#if expanded}
-        <div in:slide out:slide>
+        <div class="bullets" in:slide out:slide>
             {#each bullets as bullet}
                 <p>• {bullet}</p>
             {/each}
@@ -37,19 +37,18 @@
         backdrop-filter: blur(5px);
         padding: 20px;
         margin-bottom: 20px;
-        text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
         transition: 0.3s;
         color: var(--color-secondary);
     }
 
     .work-card h2 {
         margin: 10px 0;
-        font-size: 1.5rem;
+        font-size: 1.5em;
         color: var(--color-primary);
     }
     
     .work-card p {
-        font-size: 1rem;
+        font-size: 1em;
         margin: 3px 0;
     }
 
@@ -84,13 +83,26 @@
         left: 95%;
     }
 
-    @keyframes scale {
-        from { transform: scale(1); }
-        to { transform: scale(1.5); }
-    }
-
     @keyframes bounce {
         0%, 100% { transform: translateY(0) rotate(45deg); }
         50% { transform: translateY(-5px) rotate(45deg); }
     }
+
+    @media only screen and (max-width: 768px) {
+        img {
+            display: none;
+        }
+
+        .top-info {
+            font-size: 0.7em;
+        }
+
+        .bottom-info {
+            font-size: 0.9em;
+        }
+
+        .bullets {
+            font-size: 0.7em;
+        }
+	}
 </style>

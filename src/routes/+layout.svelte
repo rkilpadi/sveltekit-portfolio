@@ -6,10 +6,9 @@
 	import { cubicIn } from 'svelte/easing';
 
 	export let data;
-	
 </script>
 
-<div class="app" >
+<div class="app">
 	<div id="sketch">
 		<Sketch />
 	</div>

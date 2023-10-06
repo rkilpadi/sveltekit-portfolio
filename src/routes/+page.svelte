@@ -92,7 +92,6 @@
 		text-align: left;
 		position: fixed;
 		top: 30%;
-		left: 20%;
 		text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
 	}
 
@@ -133,6 +132,20 @@
 	@keyframes blink {
 		50% {
 			opacity: 0;
+		}
+	}
+
+	@media only screen and (max-width: 768px) {
+		#title-block {
+			font-size: 0.5em;
+		}
+
+		#hi-text {
+			font-size: 2.5em;
+		}
+
+		#sub-name-text {
+			font-size: 3em;
 		}
 	}
 </style>

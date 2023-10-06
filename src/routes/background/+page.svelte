@@ -20,7 +20,7 @@
 
 	<p>
 		The background of this website is a <a href="https://en.wikipedia.org/wiki/Perlin_noise">Perlin noise</a> simulation built in p5.js.
-		Feel free to adjust the settings below, but I can't guarentee your computer will like it.
+		Feel free to adjust the settings below (at your own risk).
 	</p>
 
 	<!-- <button class="button" on:click={() => $p5Settings.repel = !$p5Settings.repel}>repel</button>
@@ -100,5 +100,11 @@
 		display: flex;
 		justify-content: space-between;
 		text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+	}
+
+	@media only screen and (max-width: 768px) {
+		.sliders {
+			flex-direction: column;
+		}	
 	}
 </style>

@@ -1,8 +1,3 @@
-<script>
-	import linkedin from '$lib/images/linkedin.svg';
-	import github from '$lib/images/github.svg';
-</script>
-
 <main>
 	<div class="text-column">
 		<h1>Contact</h1>
@@ -27,6 +22,7 @@
     display: flex;
     justify-content: flex-start;
     color: var(--color-secondary);
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
   }
 
   h1 {
@@ -34,9 +30,9 @@
   }
 
   form {
-    max-width: 400px;
+    max-width: 340px;
     margin: 0 auto;
-	margin-top: 30px;
+	  margin-top: 30px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }

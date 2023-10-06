@@ -15,13 +15,12 @@
 </body>
 
 <style>
-
     main {
         display: flex;
         justify-content: center;
         align-items: flex-start;
         padding: 20px;
-        top: 30%;
+        text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
     }
 
     .experience-list {
