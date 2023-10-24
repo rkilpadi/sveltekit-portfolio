@@ -26,11 +26,7 @@
 	let ready = false;
 	onMount(() => {
 		ready = true;
-		for (let i = 0; i < routes.length; i++) {
-			if (routes[i] === $page.url.pathname) {
-				pageIdx = i;
-			}
-		}
+		pageIdx = routes.indexOf($page.url.pathname);
 	});
 </script>
 

@@ -15,6 +15,7 @@
 	let charIdx = 0;
 	let wordIdx = 0;
 	let isDeleting = false;
+	let cursorVisible = true;
 
 	function type(base, line, callback) {
 		if (charIdx < base.length) {
@@ -39,14 +40,16 @@
 			charIdx--;
 			timeout = setTimeout(cycleType, 100);
 		} else {
-			const cursor = document.getElementById("type-cursor");
-			cursor.style.animationPlayState = "running";
 			isDeleting = !isDeleting;
 			if (!isDeleting) {
 				wordIdx = (wordIdx + 1) % words.length;
 			}
+			// Bug with cursor css animation - hacky fix in JS instead
+			setTimeout(() => cursorVisible = false, 500);
+			setTimeout(() => cursorVisible = true, 1000);
+			setTimeout(() => cursorVisible = false, 1500);
 			timeout = setTimeout(() => {
-				cursor.style.animationPlayState = "paused";
+				cursorVisible = true;
 				cycleType();
 			}, 2000);
 		}
@@ -81,7 +84,7 @@
 	<p id="sub-name-text">
 	  {preText}
 	  <span id="type-text">{typingText}</span>
-	  {#if hiText === hiBase && nameText === nameBase}
+	  {#if hiText === hiBase && nameText === nameBase && cursorVisible}
 		<span id="type-cursor" class="cursor">&nbsp;</span>
 	  {/if}
 	</p>
@@ -125,14 +128,6 @@
 		background-color: var(--color-primary);
 		margin-left: 0.1rem;
 		width: 3px;
-		animation: blink 1s steps(1) infinite;
-		animation-play-state: paused;
-	}
-
-	@keyframes blink {
-		50% {
-			opacity: 0;
-		}
 	}
 
 	@media only screen and (max-width: 768px) {
