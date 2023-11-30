@@ -8,10 +8,10 @@
     export let bullets = [];
 
     let expanded = false;
-  </script>
+</script>
 
 <div class="work-card" on:click={() => expanded = !expanded}>
-    <div class="corner">
+    <div class="logo-corner">
         {#if image}
             <img src={image} alt='' width="70">
         {/if}
@@ -21,9 +21,11 @@
     <h3 class="bottom-info">{position}</h3>
     {#if expanded}
         <div class="bullets" in:slide out:slide>
-            {#each bullets as bullet}
-                <p>• {bullet}</p>
-            {/each}
+            <ul>
+                {#each bullets as bullet}
+                    <li>{bullet}</li>
+                {/each}
+            </ul>
         </div>
     {:else if bullets.length > 0}
         <i class="arrow" out:fade in:fade></i>
@@ -64,7 +66,7 @@
         animation: bounce 1s infinite;
     }
 
-    .corner {
+    .logo-corner {
         position: absolute;
         top: 30px;
         right: 30px;
@@ -80,7 +82,7 @@
         text-align: center;
         position: absolute;
         bottom: 20px;
-        left: 95%;
+        right: 30px;
     }
 
     @keyframes bounce {
