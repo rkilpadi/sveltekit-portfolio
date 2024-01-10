@@ -45,11 +45,13 @@
 		border: 1px solid var(--color-primary);
 		border-radius: 5px;
 		backdrop-filter: blur(5px);
+		-webkit-backdrop-filter: blur(5px);
 		padding: 20px;
 		margin-bottom: 20px;
 		transition: 0.3s;
 		color: var(--color-secondary);
 		cursor: pointer;
+        position: relative;
 	}
 
 	.work-card h2 {
@@ -137,3 +139,4 @@
 		}
 	}
 </style>
+
