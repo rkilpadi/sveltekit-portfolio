@@ -1,10 +1,11 @@
-import { writable } from "svelte/store";
+import { writable } from 'svelte/store';
 
 export const p5Settings = writable({
-    playing: true,
-    repel: false,
-    repelDistance: 50,
-    particleCount: 2000,
-    noise: 5,
-    strokeWeight: 1,
+	playing: true,
+	repelDistance: 0,
+	particleCount: 2000,
+	noiseScale: 0.005,
+	strokeWeight: 1
 });
+
+export const sketchKey = writable(Date.now());

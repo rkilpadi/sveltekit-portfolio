@@ -1,94 +1,90 @@
 <script>
 	import { onDestroy, onMount } from 'svelte';
 
-	const words = ["software engineer", "student", "developer", "musician"];
-	const hiBase = "Hi, my name is";
-	const nameBase = "Ryan Kilpadi";
-	const typeBase = "I'm a ";
-	let lines = ["", "", ""];
-	$: hiText = lines[0];
-	$: nameText = lines[1];
-	$: preText = lines[2];
-	$: typingText = lines[2].slice(typeBase.length);
+	const words = ['software engineer', 'student', 'developer', 'musician'];
+	const baseText = ['Hi, my name is', 'Ryan Kilpadi', "I'm a", ''];
+	const text = ['', '', '', ''];
+	const typeMillis = 100;
+	const pauseMillis = 2000;
+	const cycleIdx = words.length - 1;
 
 	let timeout;
-	let charIdx = 0;
 	let wordIdx = 0;
-	let isDeleting = false;
 	let cursorVisible = true;
+	let firstType = true;
 
-	function type(base, line, callback) {
-		if (charIdx < base.length) {
-			lines[line] += base[charIdx];
-			charIdx++;
-			timeout = setTimeout(() => type(base, line, callback), 100);
+	function type(line = 0, charIdx = 0) {
+		if (charIdx < baseText[line].length) {
+			text[line] += baseText[line][charIdx];
+			timeout = setTimeout(() => type(line, charIdx + 1), typeMillis);
+		} else if (line < baseText.length - 1) {
+			timeout = setTimeout(() => type(line + 1), typeMillis);
 		} else {
-			charIdx = 0;
-			callback();
+			cycleType();
 		}
 	}
 
-	function cycleType() {
-		if (lines[2].length < typeBase.length) {
-			type(typeBase, 2, cycleType);
-		} else if (!isDeleting && charIdx < words[wordIdx].length) {
-			typingText += words[wordIdx][charIdx];
-			charIdx++;
-			timeout = setTimeout(cycleType, 100);
-		} else if (isDeleting && charIdx > 0) {
-			typingText = typingText.slice(0, -1);
-			charIdx--;
-			timeout = setTimeout(cycleType, 100);
+	function untype() {
+		if (text[cycleIdx].length > 0) {
+			text[cycleIdx] = text[cycleIdx].slice(0, -1);
+			timeout = setTimeout(untype, typeMillis);
 		} else {
-			isDeleting = !isDeleting;
-			if (!isDeleting) {
-				wordIdx = (wordIdx + 1) % words.length;
+			cycleType();
+		}
+	}
+
+	function cycleType(wait = true) {
+		if (firstType) {
+			wait = false;
+			firstType = false;
+		}
+
+		if (wait) {
+			timeout = setTimeout(() => cycleType(false), pauseMillis);
+			// CSS cursor blink animation has bugs - hacky fix in JS instead
+			const blinks = 4;
+			for (let i = 1; i <= blinks; i++) {
+				setTimeout(() => (cursorVisible = i % 2 === 0), (i * pauseMillis) / blinks);
 			}
-			// Bug with cursor css animation - hacky fix in JS instead
-			setTimeout(() => cursorVisible = false, 500);
-			setTimeout(() => cursorVisible = true, 1000);
-			setTimeout(() => cursorVisible = false, 1500);
-			timeout = setTimeout(() => {
-				cursorVisible = true;
-				cycleType();
-			}, 2000);
+		} else if (text[cycleIdx].length > 0) {
+			untype();
+		} else {
+			baseText[cycleIdx] = words[wordIdx];
+			wordIdx = (wordIdx + 1) % words.length;
+			type(cycleIdx);
 		}
 	}
 
-	onMount(() => {
-		type(hiBase, 0, () => {
-			type(nameBase, 1, () => {
-				cycleType();
-			});
-		})
-	});
+	onMount(type);
 
-	onDestroy(() => {
-		clearTimeout(timeout);
-	});
+	onDestroy(() => clearTimeout(timeout));
 </script>
 
 <div id="title-block">
-	<p id="hi-text">{hiText}
-	  {#if hiText !== hiBase}
-		<span id="hi-cursor" class="cursor">&nbsp;</span>
-	  {/if}
+	<p id="hi-text">
+		{text[0]}
+		{#if text[0] !== baseText[0]}
+			<span id="colored-cursor" class="cursor">&nbsp;</span>
+		{/if}
 	</p>
-  
-	<p id="name-text">{nameText}
-	  {#if nameText !== nameBase && hiText === hiBase}
-		<span id="name-cursor" class="cursor">&nbsp;</span>
-	  {/if}
-	</p>  
-  
+
+	<p id="name-text">
+		{text[1]}
+		{#if text[1] !== baseText[1] && text[0] === baseText[0]}
+			<span class="cursor">&nbsp;</span>
+		{/if}
+	</p>
+
 	<p id="sub-name-text">
-	  {preText}
-	  <span id="type-text">{typingText}</span>
-	  {#if hiText === hiBase && nameText === nameBase && cursorVisible}
-		<span id="type-cursor" class="cursor">&nbsp;</span>
-	  {/if}
+		{text[2]}
+		<span id="type-text">{text[3]}</span>
+		{#if text[1] === baseText[1] && text[2] === baseText[2] && cursorVisible}
+			<span id="colored-cursor" class="cursor">&nbsp;</span>
+		{:else if text[1] === baseText[1] && cursorVisible}
+			<span class="cursor">&nbsp;</span>
+		{/if}
 	</p>
-  </div>
+</div>
 
 <style>
 	#title-block {
@@ -125,9 +121,13 @@
 
 	.cursor {
 		display: inline-block;
-		background-color: var(--color-primary);
+		background-color: var(--color-secondary);
 		margin-left: 0.1rem;
 		width: 3px;
+	}
+
+	#colored-cursor {
+		background-color: var(--color-primary);
 	}
 
 	@media only screen and (max-width: 768px) {

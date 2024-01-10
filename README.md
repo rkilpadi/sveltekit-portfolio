@@ -14,16 +14,19 @@ npm install
 ```
 
 Start a development server:
+
 ```bash
 npm run dev
 ```
 
 Create a production build:
+
 ```bash
 npm run build
 ```
 
 Preview the production build:
+
 ```bash
 npm run preview
 ```

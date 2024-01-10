@@ -7,7 +7,7 @@
 	const routes = ['/', '/work', '/background', '/contact'];
 	let pageIdx = 0;
 
-	const navTransition = { duration: 1000, axis: 'y' }
+	const navTransition = { duration: 1000, axis: 'y' };
 	let y;
 
 	function handleArrowNavigation(event) {
@@ -18,7 +18,8 @@
 			case 'ArrowLeft':
 				pageIdx = pageIdx === 0 ? routes.length - 1 : pageIdx - 1;
 				break;
-			default: return;
+			default:
+				return;
 		}
 		goto(routes[pageIdx]);
 	}
@@ -33,21 +34,20 @@
 <svelte:window on:keydown={handleArrowNavigation} bind:scrollY={y} />
 
 <svelte:head>
-    <meta charset="UTF-8">
+	<meta charset="UTF-8" />
 	<title>Ryan Kilpadi</title>
 </svelte:head>
 
 <header>
-	
 	{#if ready && y < 50}
-		<nav in:slide="{navTransition}">
+		<nav in:slide={navTransition}>
 			<svg viewBox="0 0 2 3" aria-hidden="true">
 				<path d="M0,0 L1,2 C1.5,3 1.5,3 2,3 L2,0 Z" />
 			</svg>
 			<ul>
 				{#each routes as route, i}
 					<li class:current-section={pageIdx === i}>
-						<a href={route} on:click={() => pageIdx = i}>
+						<a href={route} on:click={() => (pageIdx = i)}>
 							{route === '/' ? 'home' : route.slice(1)}
 						</a>
 					</li>
@@ -58,7 +58,6 @@
 			</svg>
 		</nav>
 	{/if}
-
 </header>
 
 <style>
@@ -86,8 +85,8 @@
 	}
 
 	.current-section a {
-    	color: var(--background-color);
-  	}
+		color: var(--background-color);
+	}
 
 	ul {
 		position: relative;

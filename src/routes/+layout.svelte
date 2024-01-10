@@ -1,7 +1,8 @@
 <script>
-	import './app.css';
+	import '../app.css';
 	import Header from './Header.svelte';
 	import Sketch from './Sketch.svelte';
+	import { sketchKey } from '$lib/stores';
 	import { fade } from 'svelte/transition';
 	import { cubicIn } from 'svelte/easing';
 
@@ -9,16 +10,18 @@
 </script>
 
 <div class="app">
-	<div id="sketch">
-		<Sketch />
-	</div>
-	
+	{#key $sketchKey}
+		<div id="sketch">
+			<Sketch />
+		</div>
+	{/key}
+
 	<Header />
 
 	<main>
 		{#key data.pathname}
 			<div in:fade={{ duration: 300, easing: cubicIn }}>
-				<slot/>
+				<slot />
 			</div>
 		{/key}
 	</main>
@@ -48,11 +51,15 @@
 		top: 0;
 		left: 0;
 		z-index: -1;
-		animation: fadein 2s;	
+		animation: fadein 2s;
 	}
 
 	@keyframes fadein {
-		from { opacity: 0; }
-		to   { opacity: 1; }
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
 	}
 </style>
