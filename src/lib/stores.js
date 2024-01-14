@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store';
 
-export const p5Settings = writable({
+export const settings = writable({
 	playing: true,
 	repelDistance: 0,
 	particleCount: 2000,

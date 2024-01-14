@@ -1,5 +1,5 @@
 <script>
-	import { p5Settings, sketchKey } from '$lib/stores.js';
+	import { settings, sketchKey } from '$lib/stores.js';
 </script>
 
 <div class="text-column">
@@ -9,15 +9,14 @@
         <p>Hi again, I'm Ryan!</p>
         <p>
             I'm a student software engineer passionate about building things with technology.
-            That includes this website, built with SvelteKit, Vite, and Vercel.
+            That includes <a href="https://github.com/rkilpadi/sveltekit-portfolio">this website</a>, built with SvelteKit, Vite, and Vercel.
             I'm currently completing my undergrad at Vassar College studying mathematics and computer science.
             I interned at Amazon Web Services for the past two summers, working in the High Performance Computing division.
         </p>
         <p>
             The background of this website is a <a href="https://en.wikipedia.org/wiki/Perlin_noise">Perlin noise</a> simulation built in p5.js.
             <br>It inspired <a href="https://flowplane.vercel.app/?dx=cos(x)&dy=y">Flowplane</a>, an interactive web app I made that plots 2D dynamical systems.
-            <br>Feel free to tinker with the settings below or
-            click to <span class="refresh-button" on:click={() => sketchKey.set(Date.now())}>refresh</span> the animation.
+            <br>Feel free to tinker with the settings below or click to <span class="refresh-button" on:click={() => sketchKey.set(Date.now())}>refresh</span> the animation.
         </p>
 
 
@@ -27,7 +26,7 @@
                     type="range"
                     min=0
                     max=10000
-                    bind:value={$p5Settings.particleCount}
+                    bind:value={$settings.particleCount}
                     name="force"
                 />
             </label>
@@ -37,7 +36,7 @@
                     type="range"
                     min=1
                     max=10
-                    bind:value={$p5Settings.strokeWeight}
+                    bind:value={$settings.strokeWeight}
                     name="strokeWeight"
                 />
             </label>
@@ -48,7 +47,7 @@
                     min=0
                     max=0.05
                     step=0.001
-                    bind:value={$p5Settings.noiseScale}
+                    bind:value={$settings.noiseScale}
                     name="noiseScale"
                 />
             </label>
@@ -58,7 +57,7 @@
                     type="range"
                     min=0
                     max=500
-                    bind:value={$p5Settings.repelDistance}
+                    bind:value={$settings.repelDistance}
                     name="noiseScale"
                 />
             </label>
@@ -81,7 +80,7 @@
 		top: 30%;
 	}
 
-	h1, card, .refresh-button {
+	h1, .card, .refresh-button {
 		text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
 	}
 

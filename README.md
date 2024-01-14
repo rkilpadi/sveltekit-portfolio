@@ -2,6 +2,7 @@
 
 Welcome to my personal website, built with SvelteKit, Vite, and Vercel.  
 The background is an interactive [Perlin noise field](https://en.wikipedia.org/wiki/Perlin_noise) simulation created using p5.js.
+It inspired [Flowplane](https://flowplane.vercel.app/), an interactive web app I made that plots 2D dynamical systems.
 
 ## Development
 

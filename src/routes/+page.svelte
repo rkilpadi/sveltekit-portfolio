@@ -2,26 +2,33 @@
 	import { onDestroy, onMount } from 'svelte';
 
 	const words = ['software engineer', 'student', 'developer', 'musician'];
-	const baseText = ['Hi, my name is', 'Ryan Kilpadi', "I'm a", ''];
+	const baseText = ['Hi, my name is', 'Ryan Kilpadi', "I'm a", words[0]];
 	const text = ['', '', '', ''];
+	const cycleIdx = baseText.length - 1;
 	const typeMillis = 100;
-	const pauseMillis = 2000;
-	const cycleIdx = words.length - 1;
+	const pauseMillis = 3000;
+    const blinkMillis = 500;
 
 	let timeout;
 	let wordIdx = 0;
 	let cursorVisible = true;
 	let firstType = true;
 
-	function type(line = 0, charIdx = 0) {
-		if (charIdx < baseText[line].length) {
-			text[line] += baseText[line][charIdx];
-			timeout = setTimeout(() => type(line, charIdx + 1), typeMillis);
-		} else if (line < baseText.length - 1) {
-			timeout = setTimeout(() => type(line + 1), typeMillis);
+	function type(lineIdx = 0, charIdx = 0) {
+		if (charIdx < baseText[lineIdx].length) {
+			text[lineIdx] += baseText[lineIdx][charIdx];
+			timeout = setTimeout(() => type(lineIdx, charIdx + 1), typeMillis);
+		} else if (lineIdx !== cycleIdx) {
+			timeout = setTimeout(() => type(lineIdx + 1), typeMillis);
 		} else {
-			cycleType();
-		}
+            timeout = setTimeout(() => {
+                cycleType();
+                cursorVisible = true;
+            }, pauseMillis);
+            for (let i = 1; i <= pauseMillis/blinkMillis; i++) {
+                setTimeout(() => (cursorVisible = i % 2 === 0), i * blinkMillis);
+            }
+        }
 	}
 
 	function untype() {
@@ -33,24 +40,12 @@
 		}
 	}
 
-	function cycleType(wait = true) {
-		if (firstType) {
-			wait = false;
-			firstType = false;
-		}
-
-		if (wait) {
-			timeout = setTimeout(() => cycleType(false), pauseMillis);
-			// CSS cursor blink animation has bugs - hacky fix in JS instead
-			const blinks = 4;
-			for (let i = 1; i <= blinks; i++) {
-				setTimeout(() => (cursorVisible = i % 2 === 0), (i * pauseMillis) / blinks);
-			}
-		} else if (text[cycleIdx].length > 0) {
+	function cycleType() {
+		if (text[cycleIdx].length > 0) {
 			untype();
 		} else {
-			baseText[cycleIdx] = words[wordIdx];
 			wordIdx = (wordIdx + 1) % words.length;
+			baseText[cycleIdx] = words[wordIdx];
 			type(cycleIdx);
 		}
 	}
@@ -144,3 +139,4 @@
 		}
 	}
 </style>
+

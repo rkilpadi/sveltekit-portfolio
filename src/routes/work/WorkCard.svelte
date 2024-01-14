@@ -9,9 +9,10 @@
 	export let links = [];
 
 	let expanded = false;
+    const expandable = bullets.length > 0 || links.length > 0;
 </script>
 
-<div class="work-card" on:click={() => (expanded = !expanded)}>
+<div class="work-card" style="cursor: {expandable ? 'pointer' : 'auto'}" on:click={() => (expanded = !expanded)}>
 	{#if image}
 		<img class="logo-corner" src={image} alt="" width="70" />
 	{/if}
@@ -21,8 +22,8 @@
 	<h3 class="bottom-info">{position}</h3>
 
 	<div class="expand-container">
-		{#if expanded && (bullets.length > 0 || links.length > 0)}
-			<div class="item" in:slide out:slide>
+		{#if expanded && expandable}
+			<div class="expand-item" in:slide out:slide>
 				<ul>
 					{#each bullets as bullet}
 						<li>{bullet}</li>
@@ -34,7 +35,7 @@
 					{/each}
 				</div>
 			</div>
-		{:else if bullets.length > 0}
+		{:else if expandable}
 			<i class="arrow" out:fade in:fade />
 		{/if}
 	</div>
@@ -50,7 +51,6 @@
 		margin-bottom: 20px;
 		transition: 0.3s;
 		color: var(--color-secondary);
-		cursor: pointer;
         position: relative;
 	}
 
@@ -91,7 +91,7 @@
 		display: grid;
 	}
 
-	.item {
+	.expand-item {
 		grid-column-start: 1;
 		grid-column-end: 2;
 		grid-row-start: 1;
