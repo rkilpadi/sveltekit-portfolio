@@ -12,11 +12,10 @@
     const expandable = bullets.length > 0 || links.length > 0;
 </script>
 
-<div class="work-card" style="cursor: {expandable ? 'pointer' : 'auto'}" on:click={() => (expanded = !expanded)}>
+<div class="work-card" style="cursor: {expandable ? 'pointer' : 'auto'}" on:click={() => expanded = !expanded}>
 	{#if image}
 		<img class="logo-corner" src={image} alt="" width="70" />
 	{/if}
-
 	<h3 class="top-info">{location} | {date}</h3>
 	<h2>{company}</h2>
 	<h3 class="bottom-info">{position}</h3>
@@ -31,7 +30,7 @@
 				</ul>
 				<div class="links">
 					{#each links as [text, href]}
-						<a {href}>{text}</a>
+						<a {href} on:click={e => e.stopPropagation()}>{text}</a>
 					{/each}
 				</div>
 			</div>

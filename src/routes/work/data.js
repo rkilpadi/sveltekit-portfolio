@@ -2,6 +2,13 @@ import aws from '$lib/images/aws.svg';
 import vassar from '$lib/images/vassar.svg';
 
 export const experiences = [
+    {
+        location: 'Boston, MA',
+        date: 'May - August 2024',
+        company: 'Amazon Web Services',
+        position: 'Incoming Software Engineer Intern',
+        image: aws
+    },
 	{
 		location: 'Boston, MA',
 		date: 'May - August 2023',
@@ -17,10 +24,7 @@ export const experiences = [
 		],
 		links: [
 			['AWS Blog Post', 'https://aws.amazon.com/blogs/hpc/slurm-rest-api-in-aws-parallelcluster/'],
-			[
-				'Open source - ParallelCluster Cookbook',
-				'https://github.com/aws/aws-parallelcluster-cookbook/pull/2373'
-			],
+			['Open source - ParallelCluster Cookbook', 'https://github.com/aws/aws-parallelcluster-cookbook/pull/2373'],
 			['Open source - ParallelCluster UI', 'https://github.com/aws/aws-parallelcluster-ui/pull/251']
 		]
 	},
@@ -40,24 +44,22 @@ export const experiences = [
 		],
 		links: [
 			['Open source - Slurm REST API', 'https://github.com/aws-samples/pcluster-manager/pull/197'],
-			[
-				'Open source - ParallelCluster UI',
-				'https://github.com/aws-samples/pcluster-manager/pull/235'
-			]
+			['Open source - ParallelCluster UI', 'https://github.com/aws-samples/pcluster-manager/pull/235']
 		]
 	},
 	{
 		location: 'Poughkeepsie, NY',
 		date: 'August 2023 - Present',
 		company: 'Vassar College',
-		position: 'Linear Algebra Grading Assistant | Mathematics Department',
+		position: 'Grading Assistant - Linear Algebra and Number Theory | Mathematics Department',
 		image: vassar
 	},
 	{
 		location: 'Poughkeepsie, NY',
-		date: 'Sep 2021 - May 2022',
+		date: 'September 2021 - May 2022',
 		company: 'Vassar College',
 		position: 'Regional and International Programs Assistant | Alumnae Office',
 		image: vassar
 	}
 ];
+
