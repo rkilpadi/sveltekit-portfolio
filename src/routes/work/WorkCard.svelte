@@ -53,13 +53,13 @@
         position: relative;
 	}
 
-	.work-card h2 {
+	h2 {
 		margin: 10px 0;
 		font-size: 1.5em;
 		color: var(--color-primary);
 	}
 
-	.work-card img {
+	img {
 		min-height: 50;
 	}
 
@@ -135,7 +135,21 @@
 
 		a {
 			font-size: 0.7em;
+            padding-bottom: 5px;
 		}
+
+        li {
+            font-size: 0.7em;
+        }
+
+        .links {
+            flex-direction: column;
+        }
+
+
+        .work-card {
+            backdrop-filter: blur(10px);
+        }
 	}
 </style>
 
