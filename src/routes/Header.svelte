@@ -10,18 +10,22 @@
 	const navTransition = { duration: 1000, axis: 'y' };
 	let y;
 
+    function navigate(newPageIdx) {
+        pageIdx = newPageIdx;
+        goto(routes[pageIdx]);
+    }
+
 	function handleArrowNavigation(event) {
 		switch (event.key) {
 			case 'ArrowRight':
-				pageIdx = (pageIdx + 1) % routes.length;
+				navigate((pageIdx + 1) % routes.length);
 				break;
 			case 'ArrowLeft':
-				pageIdx = pageIdx === 0 ? routes.length - 1 : pageIdx - 1;
+				navigate(pageIdx === 0 ? routes.length - 1 : pageIdx - 1);
 				break;
 			default:
 				return;
 		}
-		goto(routes[pageIdx]);
 	}
 
 	let ready = false;
@@ -47,9 +51,9 @@
 			<ul>
 				{#each routes as route, i}
 					<li class:current-section={pageIdx === i}>
-						<a href={route} on:click={() => (pageIdx = i)}>
+						<button on:click={() => navigate(i)}>
 							{route === '/' ? 'home' : route.slice(1)}
-						</a>
+						</button>
 					</li>
 				{/each}
 			</ul>
@@ -84,10 +88,6 @@
 		fill: var(--color-primary);
 	}
 
-	.current-section a {
-		color: var(--background-color);
-	}
-
 	ul {
 		position: relative;
 		padding: 0;
@@ -106,7 +106,7 @@
 		height: 100%;
 	}
 
-	nav a {
+	nav button {
 		display: flex;
 		height: 100%;
 		align-items: center;
@@ -118,9 +118,16 @@
 		letter-spacing: 0.1em;
 		text-decoration: none;
 		transition: color 0.2s linear;
+        cursor: pointer;
+        border: none;
+        background-color: transparent;
 	}
 
-	a:hover {
+	.current-section button {
+		color: var(--background-color);
+	}
+
+	button:hover {
 		color: var(--background-color);
 	}
 </style>
