@@ -6,12 +6,11 @@
 	<h1>Background</h1>
 
 	<div class="card">
-        <p>Hi again, I'm Ryan!</p>
         <p>
-            I'm a student software engineer passionate about building things with technology.
+            I'm a student software engineer passionate about using my technical skills to build things.
             That includes <a href="https://github.com/rkilpadi/sveltekit-portfolio">this website</a>, built with SvelteKit, Vite, and Vercel.
             I'm currently completing my undergrad at Vassar College studying mathematics and computer science.
-            I interned at Amazon Web Services for the past two summers, working in the High Performance Computing division.
+            I interned at Amazon Web Services for the past three summers, working in the High Performance Computing division.
         </p>
         <p>
             The background of this website is a <a href="https://en.wikipedia.org/wiki/Perlin_noise">Perlin noise</a> simulation built in p5.js.

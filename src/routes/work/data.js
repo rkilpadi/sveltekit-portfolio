@@ -6,8 +6,18 @@ export const experiences = [
         location: 'Boston, MA',
         date: 'May - August 2024',
         company: 'Amazon Web Services',
-        position: 'Incoming Software Engineer Intern',
-        image: aws
+        position: 'Software Engineer Intern | AWS Parallel Computing Service, HPC',
+        image: aws,
+        bullets: [
+            'Contributed to the launch of a product featuring highly complex architecture, leveraging dozens of AWS services',
+            'Designed and implemented a solution in Java to update cluster Slurm configuration stored on Docker containers',
+            'Orchestrated creation of required AWS resources using AWS CDKs in TypeScript',
+            'Delivered comprehensive integration and unit tests using Jest, JUnit, and Mockito to achieve 100% coverage',
+            'Developed scripts in Python and Bash to streamline developer experience, cutting deployment time by up to 90%',
+        ],
+        links: [
+            ['Launch Announcement', 'https://press.aboutamazon.com/2024/8/aws-parallel-computing-service-is-now-generally-available-designed-to-accelerate-scientific-discovery']
+        ]
     },
 	{
 		location: 'Boston, MA',
@@ -20,7 +30,6 @@ export const experiences = [
 			'Gained hands-on Linux expertise through managing packages, users, and compilers using Chef automation',
 			'Automated seamless creation and configuration of AWS Services such as API Gateway, Lambda, and S3',
 			'Developed a Python-based CLI tool and co-authored an official customer-facing AWS blog post to showcase interaction with the Slurm REST API, enhancing visibility for the previous year’s project',
-			'Exceeded expectations by delivering two major projects within the timeframe of one'
 		],
 		links: [
 			['AWS Blog Post', 'https://aws.amazon.com/blogs/hpc/slurm-rest-api-in-aws-parallelcluster/'],
@@ -36,11 +45,9 @@ export const experiences = [
 		image: aws,
 		bullets: [
 			'Engineered a full-stack job submission solution by enabling the Slurm REST API on cluster creation',
-			'Validated solution on six different Linux distributions and dozens of instance types',
 			'Extended functionality of a React-based frontend and wrote tests using Jest',
 			'Expanded REST API endpoints in a Flask backend and wrote tests using Pytest',
 			'Enhanced security by automating JWT authentication and NGINX configuration as a secure reverse proxy',
-			'Exceeded expectations by completing initial project to enable Slurm REST API in one-third of allocated time'
 		],
 		links: [
 			['Open source - Slurm REST API', 'https://github.com/aws-samples/pcluster-manager/pull/197'],
@@ -49,7 +56,7 @@ export const experiences = [
 	},
 	{
 		location: 'Poughkeepsie, NY',
-		date: 'August 2023 - Present',
+		date: 'August 2023 - February 2024',
 		company: 'Vassar College',
 		position: 'Grading Assistant - Linear Algebra and Number Theory | Mathematics Department',
 		image: vassar
