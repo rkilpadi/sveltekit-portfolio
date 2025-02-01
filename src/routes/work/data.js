@@ -4,6 +4,13 @@ import vassar from '$lib/images/vassar.svg';
 export const experiences = [
     {
         location: 'Boston, MA',
+        date: 'August 2025 - Present',
+        company: 'Amazon Web Services',
+        position: 'Software Engineer | AWS Parallel Computing Service, HPC',
+        image: aws,
+    },
+    {
+        location: 'Boston, MA',
         date: 'May - August 2024',
         company: 'Amazon Web Services',
         position: 'Software Engineer Intern | AWS Parallel Computing Service, HPC',

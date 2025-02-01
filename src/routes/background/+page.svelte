@@ -7,10 +7,9 @@
 
 	<div class="card">
         <p>
-            I'm a student software engineer passionate about using my technical skills to build things.
-            That includes <a href="https://github.com/rkilpadi/sveltekit-portfolio">this website</a>, built with SvelteKit, Vite, and Vercel.
-            I'm currently completing my undergrad at Vassar College studying mathematics and computer science.
-            I interned at Amazon Web Services for the past three summers, working in the High Performance Computing division.
+            I'm a student software engineer studying mathematics and computer science at Vassar College.
+            I also work at Amazon Web Services in High Performance Computing.
+            I love building all sorts of things, including <a href="https://github.com/rkilpadi/sveltekit-portfolio">this website</a> made with Svelte.
         </p>
         <p>
             The background of this website is a <a href="https://en.wikipedia.org/wiki/Perlin_noise">Perlin noise</a> simulation built in p5.js.
