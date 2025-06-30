@@ -7,7 +7,7 @@
 		<form action="https://formspree.io/f/xjvqazar" method="POST">
 			<input type="text" name="name" placeholder="Name" />
 			<input type="email" name="email" placeholder="Email" />
-			<textarea name="message" placeholder="Message" rows="5" />
+			<textarea name="message" placeholder="Message" rows="5"></textarea>
 			<div id="button-container">
 				<button type="submit">Send</button>
 				<a href="https://www.linkedin.com/in/ryan-kilpadi-b5742918a">LinkedIn</a>
@@ -74,3 +74,4 @@
 		justify-content: space-between;
 	}
 </style>
+

@@ -1,14 +1,14 @@
 <script>
 	import { onMount } from 'svelte';
 	import { slide } from 'svelte/transition';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
 
 	const routes = ['/', '/work', '/background', '/contact'];
-	let pageIdx = 0;
+	let pageIdx = $state(0);
 
 	const navTransition = { duration: 1000, axis: 'y' };
-	let y;
+	let y = $state();
 
     function navigate(newPageIdx) {
         pageIdx = newPageIdx;
@@ -28,14 +28,14 @@
 		}
 	}
 
-	let ready = false;
+	let ready = $state(false);
 	onMount(() => {
 		ready = true;
-		pageIdx = routes.indexOf($page.url.pathname);
+		pageIdx = routes.indexOf(page.url.pathname);
 	});
 </script>
 
-<svelte:window on:keydown={handleArrowNavigation} bind:scrollY={y} />
+<svelte:window onkeydown={handleArrowNavigation} bind:scrollY={y} />
 
 <svelte:head>
 	<meta charset="UTF-8" />
@@ -51,7 +51,7 @@
 			<ul>
 				{#each routes as route, i}
 					<li class:current-section={pageIdx === i}>
-						<button on:click={() => navigate(i)}>
+						<button onclick={() => navigate(i)}>
 							{route === '/' ? 'home' : route.slice(1)}
 						</button>
 					</li>
@@ -131,3 +131,4 @@
 		color: var(--background-color);
 	}
 </style>
+

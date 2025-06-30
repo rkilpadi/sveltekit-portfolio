@@ -3,16 +3,14 @@
 	import Card from './WorkCard.svelte';
 </script>
 
-<body>
-	<main>
-		<div class="experience-list">
-			{#each experiences as experience}
-				<Card {...experience} />
-			{/each}
-			<a href="/resume.pdf">View full resume</a>
-		</div>
-	</main>
-</body>
+<main>
+    <div class="experience-list">
+        {#each experiences as experience}
+            <Card {...experience} />
+        {/each}
+        <a href="/resume.pdf">View full resume</a>
+    </div>
+</main>
 
 <style>
 	main {

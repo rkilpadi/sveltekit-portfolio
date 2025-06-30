@@ -1,18 +1,21 @@
 <script>
 	import { slide, fade } from 'svelte/transition';
-	export let location;
-	export let date;
-	export let company;
-	export let position;
-	export let image;
-	export let bullets = [];
-	export let links = [];
 
-	let expanded = false;
+	const {
+		location,
+		date,
+		company,
+		position,
+		image,
+		bullets = [],
+		links = []
+	} = $props();
+
+	let expanded = $state(false);
     const expandable = bullets.length > 0 || links.length > 0;
 </script>
 
-<div class="work-card" style="cursor: {expandable ? 'pointer' : 'auto'}" on:click={() => expanded = !expanded}>
+<div class="work-card" style="cursor: {expandable ? 'pointer' : 'auto'}" onclick={() => expanded = !expanded}>
 	{#if image}
 		<img class="logo-corner" src={image} alt="" width="70" />
 	{/if}
@@ -30,12 +33,12 @@
 				</ul>
 				<div class="links">
 					{#each links as [text, href]}
-						<a {href} on:click={e => e.stopPropagation()}>{text}</a>
+						<a {href} onclick={e => e.stopPropagation()}>{text}</a>
 					{/each}
 				</div>
 			</div>
 		{:else if expandable}
-			<i class="arrow" out:fade in:fade />
+			<i class="arrow" out:fade in:fade></i>
 		{/if}
 	</div>
 </div>

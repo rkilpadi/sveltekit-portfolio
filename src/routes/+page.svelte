@@ -3,7 +3,7 @@
 
 	const words = ['software engineer', 'student', 'developer', 'musician'];
 	const baseText = ['Hi, my name is', 'Ryan Kilpadi', "I'm a", words[0]];
-	const text = ['', '', '', ''];
+	const text = $state(['', '', '', '']);
 	const cycleIdx = baseText.length - 1;
 	const typeMillis = 100;
 	const pauseMillis = 3000;
@@ -11,7 +11,7 @@
 
 	let timeout;
 	let wordIdx = 0;
-	let cursorVisible = true;
+	let cursorVisible = $state(true);
 	let firstType = true;
 
 	function type(lineIdx = 0, charIdx = 0) {

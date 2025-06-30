@@ -6,7 +6,7 @@
 	import { fade } from 'svelte/transition';
 	import { cubicIn } from 'svelte/easing';
 
-	export let data;
+	let { data, children } = $props();
 </script>
 
 <div class="app">
@@ -21,7 +21,7 @@
 	<main>
 		{#key data.pathname}
 			<div in:fade={{ duration: 300, easing: cubicIn }}>
-				<slot />
+				{@render children?.()}
 			</div>
 		{/key}
 	</main>
@@ -63,3 +63,4 @@
 		}
 	}
 </style>
+
