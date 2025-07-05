@@ -1,28 +1,28 @@
-<main>
-	<div class="text-column">
-		<h1>Contact</h1>
+<div class="contact">
+    <h1>Contact</h1>
 
-		<p>Get in touch!</p>
+    <p>Get in touch!</p>
 
-		<form action="https://formspree.io/f/xjvqazar" method="POST">
-			<input type="text" name="name" placeholder="Name" />
-			<input type="email" name="email" placeholder="Email" />
-			<textarea name="message" placeholder="Message" rows="5"></textarea>
-			<div id="button-container">
-				<button type="submit">Send</button>
-				<a href="https://www.linkedin.com/in/ryan-kilpadi-b5742918a">LinkedIn</a>
-				<a href="https://github.com/rkilpadi">GitHub</a>
-			</div>
-		</form>
-	</div>
-</main>
+    <form action="https://formspree.io/f/xjvqazar" method="POST">
+        <input type="text" name="name" placeholder="Name" />
+        <input type="email" name="email" placeholder="Email" />
+        <textarea name="message" placeholder="Message" rows="5"></textarea>
+        <div id="button-container">
+            <button type="submit">Send</button>
+            <a href="https://www.linkedin.com/in/ryan-kilpadi-b5742918a">LinkedIn</a>
+            <a href="https://github.com/rkilpadi">GitHub</a>
+        </div>
+    </form>
+</div>
 
 <style>
-	main {
-		display: flex;
-		justify-content: flex-start;
+	.contact {
 		color: var(--color-secondary);
 		text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		text-align: left;
 	}
 
 	h1 {
@@ -31,8 +31,6 @@
 
 	form {
 		max-width: 340px;
-		margin: 0 auto;
-		margin-top: 30px;
 		border-radius: 8px;
 		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 	}

@@ -6,14 +6,15 @@ export const experiences = [
         location: 'Boston, MA',
         date: 'August 2025 - Present',
         company: 'Amazon Web Services',
-        position: 'Software Engineer | AWS Parallel Computing Service, HPC',
+        position: 'Software Engineer — AWS Parallel Computing Service, HPC',
+        team: 'AWS Parallel Computing Service, HPC',
         image: aws,
     },
     {
         location: 'Boston, MA',
         date: 'May - August 2024',
         company: 'Amazon Web Services',
-        position: 'Software Engineer Intern | AWS Parallel Computing Service, HPC',
+        position: 'Software Engineer Intern — AWS Parallel Computing Service, HPC',
         image: aws,
         bullets: [
             'Contributed to the launch of a product featuring highly complex architecture, leveraging dozens of AWS services',
@@ -30,7 +31,7 @@ export const experiences = [
 		location: 'Boston, MA',
 		date: 'May - August 2023',
 		company: 'Amazon Web Services',
-		position: 'Software Engineer Intern | AWS ParallelCluster, HPC',
+		position: 'Software Engineer Intern — AWS ParallelCluster, HPC',
 		image: aws,
 		bullets: [
 			'Scoped, designed, and implemented a solution to support the Spack package manager on HPC clusters, reducing install times for large software packages from hours to seconds',
@@ -48,7 +49,7 @@ export const experiences = [
 		location: 'Seattle, WA',
 		date: 'June - August 2022',
 		company: 'Amazon Web Services',
-		position: 'Software Engineer Intern | AWS ParallelCluster, HPC',
+		position: 'Software Engineer Intern — AWS ParallelCluster, HPC',
 		image: aws,
 		bullets: [
 			'Engineered a full-stack job submission solution by enabling the Slurm REST API on cluster creation',
@@ -65,14 +66,14 @@ export const experiences = [
 		location: 'Poughkeepsie, NY',
 		date: 'August 2023 - February 2024',
 		company: 'Vassar College',
-		position: 'Grading Assistant - Linear Algebra and Number Theory | Mathematics Department',
+		position: 'Grading Assistant - Linear Algebra and Number Theory — Mathematics Department',
 		image: vassar
 	},
 	{
 		location: 'Poughkeepsie, NY',
 		date: 'September 2021 - May 2022',
 		company: 'Vassar College',
-		position: 'Regional and International Programs Assistant | Alumnae Office',
+		position: 'Regional and International Programs Assistant — Alumnae Office',
 		image: vassar
 	}
 ];

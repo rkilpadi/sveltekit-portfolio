@@ -3,8 +3,9 @@
 	import { slide } from 'svelte/transition';
 	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
+	import { refresh } from '$lib/sketchStores.js';
 
-	const routes = ['/', '/work', '/background', '/contact'];
+	const routes = ['/', '/work', '/projects', '/background', '/contact'];
 	let pageIdx = $state(0);
 
 	const navTransition = { duration: 1000, axis: 'y' };
@@ -16,16 +17,11 @@
     }
 
 	function handleArrowNavigation(event) {
-		switch (event.key) {
-			case 'ArrowRight':
-				navigate((pageIdx + 1) % routes.length);
-				break;
-			case 'ArrowLeft':
-				navigate(pageIdx === 0 ? routes.length - 1 : pageIdx - 1);
-				break;
-			default:
-				return;
-		}
+        if (event.key === 'ArrowRight') {
+            navigate((pageIdx + 1) % routes.length);
+        } else if (event.key === 'ArrowLeft') {
+            navigate(pageIdx === 0 ? routes.length - 1 : pageIdx - 1);
+        }
 	}
 
 	let ready = $state(false);
@@ -111,7 +107,7 @@
 		height: 100%;
 		align-items: center;
 		padding: 0 0.5rem;
-		color: var(--color-secondary);
+		color: #ffffff;
 		font-weight: 700;
 		font-size: 0.8rem;
 		text-transform: uppercase;

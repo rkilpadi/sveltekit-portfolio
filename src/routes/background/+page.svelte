@@ -1,5 +1,5 @@
 <script>
-	import { settings, sketchKey } from '$lib/stores.js';
+	import { particleCount, strokeWeight, noiseScale, repelDistance, refresh } from '$lib/sketchStores.js';
 </script>
 
 <div class="text-column">
@@ -14,7 +14,7 @@
         <p>
             The background of this website is a <a href="https://en.wikipedia.org/wiki/Perlin_noise">Perlin noise</a> simulation built in p5.js.
             <br>It inspired <a href="https://flowplane.vercel.app/?dx=cos(x)&dy=y">Flowplane</a>, an interactive web app I made that plots 2D dynamical systems.
-            <br>Feel free to tinker with the settings below or click to <span class="refresh-button" onclick={() => sketchKey.set(Date.now())}>refresh</span> the animation.
+            <br>Feel free to tinker with the settings below or click to <span class="refresh-button" onclick={refresh}>refresh</span> the animation.
         </p>
 
 
@@ -24,7 +24,7 @@
                     type="range"
                     min=0
                     max=10000
-                    bind:value={$settings.particleCount}
+                    bind:value={$particleCount}
                     name="force"
                 />
             </label>
@@ -34,7 +34,7 @@
                     type="range"
                     min=1
                     max=10
-                    bind:value={$settings.strokeWeight}
+                    bind:value={$strokeWeight}
                     name="strokeWeight"
                 />
             </label>
@@ -45,7 +45,7 @@
                     min=0
                     max=0.05
                     step=0.001
-                    bind:value={$settings.noiseScale}
+                    bind:value={$noiseScale}
                     name="noiseScale"
                 />
             </label>
@@ -55,7 +55,7 @@
                     type="range"
                     min=0
                     max=500
-                    bind:value={$settings.repelDistance}
+                    bind:value={$repelDistance}
                     name="noiseScale"
                 />
             </label>

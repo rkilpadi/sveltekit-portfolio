@@ -15,7 +15,13 @@
     const expandable = bullets.length > 0 || links.length > 0;
 </script>
 
-<div class="work-card" style="cursor: {expandable ? 'pointer' : 'auto'}" onclick={() => expanded = !expanded}>
+<button
+	class="card-button"
+	disabled={!expandable}
+	aria-expanded={expanded}
+	onclick={() => expanded = !expanded}
+    onkeydown={(e) => e.preventDefault()}
+>
 	{#if image}
 		<img class="logo-corner" src={image} alt="" width="70" />
 	{/if}
@@ -41,48 +47,21 @@
 			<i class="arrow" out:fade in:fade></i>
 		{/if}
 	</div>
-</div>
+</button>
 
 <style>
-	.work-card {
-		border: 1px solid var(--color-primary);
-		border-radius: 5px;
-		backdrop-filter: blur(5px);
-		-webkit-backdrop-filter: blur(5px);
-		padding: 20px;
-		margin-bottom: 20px;
-		transition: 0.3s;
-		color: var(--color-secondary);
-        position: relative;
-	}
-
-	h2 {
-		margin: 10px 0;
-		font-size: 1.5em;
-		color: var(--color-primary);
-	}
-
 	img {
-		min-height: 50;
+		min-height: 50px;
 	}
 
-	.work-card:hover {
-		transform: scale(1.03);
-	}
-
-	.work-card:hover .arrow {
+	.card-button:not(:disabled):hover .arrow {
 		animation: bounce 1s infinite;
 	}
 
 	.logo-corner {
 		position: absolute;
-		top: 30px;
-		right: 30px;
-	}
-
-	.links {
-		display: flex;
-		justify-context: space-between;
+		top: 20px;
+		right: 20px;
 	}
 
 	a {
@@ -94,10 +73,7 @@
 	}
 
 	.expand-item {
-		grid-column-start: 1;
-		grid-column-end: 2;
-		grid-row-start: 1;
-		grid-row-end: 2;
+		grid-area: 1 / 1;
 	}
 
 	.arrow {
@@ -107,7 +83,6 @@
 		padding: 3px;
 		transform: rotate(45deg);
 		-webkit-transform: rotate(45deg);
-		text-align: center;
 		position: absolute;
 		bottom: 20px;
 		right: 30px;
@@ -138,21 +113,17 @@
 
 		a {
 			font-size: 0.7em;
-            padding-bottom: 5px;
+			padding-bottom: 5px;
 		}
 
-        li {
-            font-size: 0.7em;
-        }
+		li {
+			font-size: 0.7em;
+		}
 
-        .links {
-            flex-direction: column;
-        }
-
-
-        .work-card {
-            backdrop-filter: blur(10px);
-        }
+		.links {
+			display: flex;
+			flex-direction: column;
+		}
 	}
 </style>
 

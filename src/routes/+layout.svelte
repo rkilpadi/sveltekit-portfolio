@@ -2,9 +2,10 @@
 	import '../app.css';
 	import Header from './Header.svelte';
 	import Sketch from './Sketch.svelte';
-	import { sketchKey } from '$lib/stores';
 	import { fade } from 'svelte/transition';
 	import { cubicIn } from 'svelte/easing';
+	import { page } from '$app/state';
+	import { sketchKey } from '$lib/sketchStores';
 
 	let { data, children } = $props();
 </script>
@@ -16,11 +17,11 @@
 		</div>
 	{/key}
 
-	<Header />
+    <Header />
 
 	<main>
 		{#key data.pathname}
-			<div in:fade={{ duration: 300, easing: cubicIn }}>
+			<div in:fade={{ duration: 200, easing: cubicIn }}>
 				{@render children?.()}
 			</div>
 		{/key}

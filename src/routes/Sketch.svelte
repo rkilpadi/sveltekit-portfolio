@@ -1,74 +1,97 @@
 <script>
 	import P5 from 'p5-svelte';
-	import { settings } from '$lib/stores.js';
 	import { onDestroy } from 'svelte';
+	import { 
+        particleCount, 
+        strokeWeight,
+        repelDistance, 
+        noiseScale, 
+        readingMode, 
+        particlesSpawned,
+        refresh 
+    } from '$lib/sketchStores.js';
 
 	let p5Instance;
-	let particles = [];
 
 	const sketch = (p5) => {
 		p5Instance = p5;
 
+        // state is managed by p5, no need for runes
+        let particles = [];
+        let escapedParticles = new Set();
+
 		p5.setup = () => {
 			p5.createCanvas(window.innerWidth, window.innerHeight);
-            if (window.innerWidth < 768 || window.innerHeight < 500) {
-                $settings.particleCount = 400;
-                $settings.strokeWeight = 5;
+            if ($readingMode) {
+                return;
             }
-			for (let i = 0; i < $settings.particleCount; i++) {
+            $particlesSpawned = true;
+
+            if (window.innerWidth < 768 || window.innerHeight < 500) {
+                $particleCount = 400;
+                $strokeWeight = 5;
+            }
+			for (let i = 0; i < $particleCount; i++) {
 				particles.push(p5.createVector(Math.random() * p5.width, Math.random() * p5.height));
 			}
 			p5.stroke('lightseagreen');
 		};
 
 		p5.draw = () => {
-			p5.strokeWeight($settings.strokeWeight);
-			p5.background(35, 30, 50, 10);
+			p5.strokeWeight($strokeWeight);
 
-			for (let i = 0; i < $settings.particleCount; i++) {
+            if (!$readingMode) {
+                p5.background(35, 30, 50, 10);
+            } else {
+                p5.background(24, 19, 40, 10);
+                if (escapedParticles.size == $particleCount) {
+                    escapedParticles = new Set();
+                    $particleCount = 0;
+                    return;
+                }
+            }
+
+			for (let i = 0; i < $particleCount; i++) {
 				if (i >= particles.length) {
+                    if ($readingMode) {
+                        break;
+                    }
 					particles.push(p5.createVector(Math.random() * p5.width, Math.random() * p5.height));
 				}
 				let p = particles[i];
 				p5.point(p.x, p.y);
 
-                let a = p5.TAU * p5.noise(p.x * $settings.noiseScale, p.y * $settings.noiseScale);
+                if ($readingMode) {
+                    p.x += (p.x - p5.mouseX) / 50;
+                    p.y += (p.y - p5.mouseY) / 50;
+                }
+
+                let a = p5.TAU * p5.noise(p.x * $noiseScale, p.y * $noiseScale);
                 p.x += Math.cos(a);
                 p.y += Math.sin(a);
 
-                if ($settings.repelDistance > 0) {
+                if (p.x < 0 || p.x > p5.width || p.y < 0 || p.y > p5.height) {
+                    if ($readingMode) {
+                        escapedParticles.add(p);
+                    } else {
+                        p.x = p5.width;
+                        p.y = Math.random() * p5.height;
+                    }
+                }
+
+                if ($repelDistance > 0) {
                     let mouseToParticle = p5.createVector(p.x - p5.mouseX, p.y - p5.mouseY);
                     let distance = mouseToParticle.mag();
-                    if (distance < $settings.repelDistance) {
-                        mouseToParticle.setMag(p5.map(distance, 0, $settings.repelDistance, 5, 0));
+                    if (distance < $repelDistance) {
+                        mouseToParticle.setMag(p5.map(distance, 0, $repelDistance, 5, 0));
                         p.add(mouseToParticle);
                     }
 				}
-
-                if (p.x < 0 || p.x > p5.width || p.y < 0 || p.y > p5.height) {
-                    p.x = p5.width;
-                    p.y = Math.random() * p5.windowHeight;
-                }
-			}
-		};
-
-		p5.mousePressed = () => {
-			p5.noiseSeed(p5.millis());
-		};
-
-		p5.keyPressed = () => {
-            const spacebar = 32;
-			if (p5.keyCode === p5.LEFT_ARROW || p5.keyCode === p5.RIGHT_ARROW) {
-				p5.noiseSeed(p5.millis());
-			} else if (p5.keyCode === spacebar) {
-                $settings.playing = !$settings.playing;
-				$settings.playing ? p5.loop() : p5.noLoop();
 			}
 		};
 
 		p5.windowResized = () => {
-			p5.canvas.remove();
-			p5.setup();
+            refresh();
 		};
 	};
 
