@@ -19,15 +19,17 @@
         // state is managed by p5, no need for runes
         let particles = [];
         let escapedParticles = new Set();
+        let sketchWidth = window.innerWidth;
+        let sketchHeight = window.innerHeight;
 
 		p5.setup = () => {
-			p5.createCanvas(window.innerWidth, window.innerHeight);
+			p5.createCanvas(sketchWidth, sketchHeight);
             if ($readingMode) {
                 return;
             }
             $particlesSpawned = true;
 
-            if (window.innerWidth < 768 || window.innerHeight < 500) {
+            if (sketchWidth < 768 || sketchHeight < 500) {
                 $particleCount = 400;
                 $strokeWeight = 5;
             }
@@ -91,7 +93,13 @@
 		};
 
 		p5.windowResized = () => {
-            refresh();
+            const widthChanged = sketchWidth !== window.innerWidth;
+            const heightChangedWithTolerance = Math.abs(sketchHeight - window.innerHeight) > 100;
+            if (!$readingMode && (widthChanged || heightChangedWithTolerance)) {
+                sketchWidth = window.innerWidth;
+                sketchHeight = window.innerHeight;
+                refresh();
+            }
 		};
 	};
 

@@ -1,5 +1,7 @@
 import { error } from '@sveltejs/kit';
 
+export const prerender = 'auto';
+
 export async function load({ params }) {
     try {
         const post = await import(`$lib/posts/${params.slug}.js`);

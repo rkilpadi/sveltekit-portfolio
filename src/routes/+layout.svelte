@@ -51,7 +51,7 @@
 		position: fixed !important;
 		top: 0;
 		left: 0;
-		z-index: -1;
+		z-index: -10;
 		animation: fadein 2s;
 	}
 
