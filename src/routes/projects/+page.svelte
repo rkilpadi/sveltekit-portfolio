@@ -3,6 +3,14 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
 	import { posts } from './data.js';
+
+    function handleNavigation(post) {
+        if (post.slug) {
+            goto(`${page.url.pathname}/${post.slug}`);
+        } else if (post.link) {
+            window.location = post.link;
+        }
+    }
 </script>
 
 <div class="blog-list">
@@ -10,10 +18,11 @@
         <button 
             type="button" 
             class="card-button" 
-            onclick={() => goto(`${page.url.pathname}/${post.slug}`)}
+            onclick={() => handleNavigation(post)}
         >
             <h2>{post.title}</h2>
             <h3 class="bottom-info">{post.date}</h3>
+            <p>{post.summary}</p>
         </button>
     {/each}
 </div>
