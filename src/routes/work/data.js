@@ -17,7 +17,7 @@ export const experiences = [
         position: 'Software Engineer Intern — AWS Parallel Computing Service, HPC',
         image: aws,
         bullets: [
-            'Contributed to the launch of a product featuring highly complex architecture, leveraging dozens of AWS services',
+            'Contributed to the launch of a product featuring complex architecture, leveraging dozens of AWS services',
             'Designed and implemented a solution in Java to update cluster Slurm configuration stored on Docker containers',
             'Orchestrated creation of required AWS resources using AWS CDKs in TypeScript',
             'Delivered comprehensive integration and unit tests using Jest, JUnit, and Mockito to achieve 100% coverage',
@@ -40,7 +40,6 @@ export const experiences = [
 			'Developed a Python-based CLI tool and co-authored an official customer-facing AWS blog post to showcase interaction with the Slurm REST API, enhancing visibility for the previous year’s project',
 		],
 		links: [
-			['AWS Blog Post', 'https://aws.amazon.com/blogs/hpc/slurm-rest-api-in-aws-parallelcluster/'],
 			['Open source - ParallelCluster Cookbook', 'https://github.com/aws/aws-parallelcluster-cookbook/pull/2373'],
 			['Open source - ParallelCluster UI', 'https://github.com/aws/aws-parallelcluster-ui/pull/251']
 		]

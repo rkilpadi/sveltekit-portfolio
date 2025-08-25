@@ -1,4 +1,4 @@
-# Tarka: A Rudimentary Verification-Aware Lisp Dialect
+# Tarka: A Verification-Aware Lisp Dialect
 
 On many occasions, minor bugs in software have cost companies millions of dollars. The current standard for validation in software development is unit testing, which provides evidence that programs work as expected by running through finitely many test cases. But this approach simply tells us that our code works on cases we foresee, and does not provably verify the correctness of code. Instead, we could compile production code to be verified by an SMT (Satisfiability Modulo Theories) solver like [Z3](https://github.com/Z3Prover/z3), thereby achieving mathematically correct code. This is called a **verification condition generator** (VCG).
 
@@ -9,7 +9,7 @@ On many occasions, minor bugs in software have cost companies millions of dollar
 I implemented a simple verification condition generator for a rudimentary language I am calling Tarka (which means “logic” in Sanskrit). In doing so, I extended a compiler written in OCaml for a toy language that I built in a compilers class. My VCG adds a stage before compilation that converts code written in my language into logical expressions that can be interpreted by the Z3 SMT solver. It allows users to input preconditions and postconditions that will be formally verified. If verification fails, the code will not compile. As long as my VCG and the SMT solver I am using have no flaws, users can definitively prove their assertions. For example, the following Tarka function will verify that the sum of two positive integers is greater than both integers:
 
   
-```
+```lisp
 (def (add n : Num m : Num) : Num (
 	(requires (> m 0))
 	(requires (> n 0))
@@ -23,7 +23,7 @@ In order to design the syntax for Tarka, I took inspiration from existing langua
 
 SMT solvers are great at checking satisfiability in formulae in [first-order logic](https://en.wikipedia.org/wiki/First-order_logic). But since Tarka is a functional language, most interesting programs rely on recursion. For each recursive call, an inductive hypothesis is added to the solver, using the updated argument expression. For example, consider the following function:
 
-  ```
+```lisp
 (def (fibonacci n : Num) : Num (
 	(requires (>= n 0))
 	(ensures (>= result 0))

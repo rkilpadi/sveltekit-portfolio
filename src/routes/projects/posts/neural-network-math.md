@@ -1,18 +1,19 @@
+
 # The Math Behind Building a Neural Network From Scratch
 
-When I was first learning about machine learning, I remember being told not to worry about the math behind the models I built. Now that I have a deeper background in math, I decided to take a look into the mathematical foundations of neural networks and try to build my own using only NumPy. This post will be math-heavy, but if you have an understanding of linear algebra and multivariable calculus, you'll understand why the logic behind neural networks essentially boils down to a minimization problem.
+When I was first learning about machine learning, I remember being told not to worry about the math behind the models I built using libraries like PyTorch and TensorFlow. Now that I have a deeper understanding of math, I decided to dig into the theoretical foundations of neural networks. In doing so, I was able to classify handwritten digits from 0-9 with 97% accuracy in under 100 lines of Python! However, I did a lot of work to derive just a few lines of code, which I will be explaining here. This post will be math-heavy, but if you have an understanding of linear algebra and multivariable calculus, you'll understand why the logic behind neural networks essentially boils down to a minimization problem.
 
-I took heavy inspiration from the [series by 3blue1brown](https://www.youtube.com/playlist?list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi), which has great visual explanations for these concepts, and Michael Nielsen's book [Neural Networks and Deep Learning](http://neuralnetworksanddeeplearning.com/). My focus here will be on the math, so this is will not be a good first introduction to neural networks. I highly recommend checking out those resources to gain a better conceptual understanding of the topic.
+I took heavy inspiration from the [series by 3blue1brown](https://www.youtube.com/playlist?list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi), which has great visual explanations for all of these concepts, as well as Michael Nielsen's book [Neural Networks and Deep Learning](http://neuralnetworksanddeeplearning.com/). My focus here is specifically on the math behind backpropagation, so if you aren't familiar with the basic components of neural networks (like layers and weights), I highly recommend checking out these resources first.
 
-# The Basic Structure of a Neural Network
+# A Refresher on the Basic Structure of Neural Networks
 
-We will be training our simple model on the MNIST dataset, which classifies handwritten digits from 0-9. This is a classic task for machine learning, and any programmer would know that this is very hard to solve with a conventional program.
+We will be training our simple model on the MNIST dataset, which classifies handwritten digits from 0-9. This is a classic task for machine learning, and anyone who has written code would know that this is very hard to solve with a conventional program.
 
-The neural network we will create will have an input layer of 784 nodes, each representing the grayscale value in a 28x28 image of a handwritten digit. The output layer will consist of 10 nodes, each representing a digit between 0-9. In between, we will add some hidden layers to allow the network to learn complex patterns.
+The neural network we will create will have an input layer of 784 nodes, each representing the grayscale value of a single pixel in a 28x28 image of a handwritten digit. The output layer will consist of 10 nodes, each representing a digit between 0-9. In between, we will add some hidden layers to allow the network to learn complex patterns.
 
-The numerical value assigned to each node its **activation**. As we discussed earlier, the activation of a node in the input layer is simply determined by the input, such as the brightness of a pixel. For every other layer, each node is given a vector of **weights** and a **bias**. Every node has one weight for each node in the previous layer. 
+The numerical value assigned to each node is its **activation**. As we discussed earlier, the activation of a node in the input layer is simply determined by the input, such as the brightness of a pixel. For all other layers, each node is given a vector of **weights** and a **bias**. Every node has one weight for each node in the previous layer. Weights and biases are the tools that the network has to learn patterns in the data, and are the variables that are updated in training.
 
-Here is a class to represent a layer. All we need to know is the size of the current and previous layers, unless it is the input layer which has no weights or biases. Note that `weights` is a matrix where each entry represents of how each neuron in the current layer is affected by an activation in the previous layer.
+Here is a class to represent a layer. All we need to know to instantiate a new layer is its size and the size of the previous layer, unless it is the input layer, which has no weights or biases. Note that `weights` is a matrix where each entry represents how a single neuron in the current layer is affected by a single neuron in the previous layer.
 
 ```python
 class Layer:
@@ -27,15 +28,15 @@ class Layer:
         self.weights = np.random.randn(size, last_size) * np.sqrt(2 / last_size)
         self.biases = np.zeros(size)
 ```
-To calculate the activation of the a given node, we sum the weighted activations of every node in the previous layer and add the bias as an offset. Finally, we need to pass this through an **activation function** to introduce some non-linearity to the network, allowing it to learn more complex patterns. We will be using ReLU (rectified linear unit), which is defined as $\max(0,x)$ and is a very standard activation function to use. This why I normalized each value in the `weights` matrix, called [He initialization](https://en.wikipedia.org/wiki/Weight_initialization#He_initialization), which pairs well with the unbounded ReLU function. Without proper initialization, we could run into the issue of exploding weights.
+To calculate the activation of the a given node, we sum the weighted activations of every node in the previous layer and add the bias as an offset. Then, we pass this result through an **activation function** to introduce some non-linearity to the network, allowing it to learn more complex patterns. We will be using ReLU (rectified linear unit), which is defined as $\max(0,x)$ and is a very standard activation function. I used [He initialization](https://en.wikipedia.org/wiki/Weight_initialization#He_initialization) to randomly initialize weights in a distribution that works well with ReLU. Without proper initialization, we could run into issues like exploding or dying weights.
 
-To summarize, the formula the network will use to calculate the activation of a single neuron is:
+In notation, the formula I described above which the network will use to calculate the activation of a single neuron is:
 
 $$
 a_i^l=\phi\left(\sum_j{w_{ij}^la^{l-1}_j+b_i^l}\right)
 $$
 
-It's easy to get lost in all this notation, but the formula is actually relatively simple. Keep in mind that the superscripts index layers, while the subscripts index nodes within the layer. The current layer is indexed by $i$, while the previous layer uses $j$. Here's a breakdown of what all of these variables mean:
+It's easy to get lost in the superscripts and subscripts here, but the formula is actually pretty simple. Keep in mind that the superscripts index layers, while the subscripts index nodes within the layer. The current layer is indexed by $i$, while the previous layer uses $j$. Here's a breakdown of what all of these variables mean:
 
 - $a_i^l$ is the activation of the $i$th neuron in the $l$th layer, where $l>0$ (input layer activations are given)
 - $b^l_i$ is the bias for the neuron
@@ -55,9 +56,9 @@ This calculation can be done in a single line of code (assuming we have defined 
 layer.activation = relu(layer.weights @ prev_layer.activations + layer.biases)
 ```
 
-# Evaluation
+# The Cost Function
 
-To actually train the model, we need to evaluate the accuracy of the network's outputs so that we can adjust our weights and biases accordingly. This is where the cost function (or loss function) comes in. A common cost function to use for classification problems is cross entropy loss, also known as log loss. For our case, where there is only one correct output, this function is simply defined as
+To actually train the model, we need to evaluate the accuracy of the network's predictions so that we can adjust our weights and biases accordingly. This is where the cost function (or loss function) comes in. When our model correctly guesses an answer with high confidence, which means it has a high activation in the output layer node representing the correct digit, the cost should be lower. A common cost function to use for classification problems is cross entropy loss, also known as log loss. For our case, where there is only one correct answer, this function is simply defined as
 
  $$
  C(\mathbf{a}^L)=-\ln a^L_c
@@ -65,31 +66,30 @@ To actually train the model, we need to evaluate the accuracy of the network's o
  
  where $a_c^L$ is the activation of the expected result in the output layer and $0<a_c^L\leq1$.
 
-Cross entropy loss pairs well with the softmax activation function, which we will be using instead of ReLU on the last layer. This is because softmax normalizes values between 0 and 1 (they will also work together to make the math work out nicely later). Softmax takes a vector of values and converts them to a probability distribution. We will pick the largest value to be the model's "guess" as to which digit it thinks the input is.
+Cross entropy loss pairs well with the softmax activation function, which we will be using instead of ReLU on the last layer. This is because softmax normalizes values between 0 and 1, and they will also work together to make the math work out nicely later. Softmax takes a vector of values and converts them to a probability distribution. We will pick the largest value to be the model's "guess" as to which digit it thinks the input is.
 
-If this were the output layer of a neural network, the second element (or node) would be its "guess" as to which category to put it in, and the loss would be $-\ln 0.8\approx 0.22$. As a sanity check, if the expected result has an activation approaching $1$, this means that our network has high confidence that this is the correct answer, and we expect the cost function to be very small:
+As a sanity check, if the expected result has an activation approaching $1$, this means that our network has high confidence that this is the correct answer, and we expect the cost to be very small:
 
 $$
 \lim_{x\rightarrow 1}(-\ln x)=0
 $$
 
-Conversely, if the activation is close to $0$, then the network was very wrong and the loss should be high:
+Conversely, if the activation is close to $0$, then the network was very wrong and the cost should be high:
 
 $$
 \lim_{x\rightarrow 0}(-\ln x)=\infty
 $$
 
-The cost function that evaluates the model will be critical to improve it.
+The cost will determine how we "punish" or "reward" the model mathematically.
 
 # Training and Backpropagation Calculus 
 
-To actually train the network, we need shift our weights and biases based on the result of our cost function. To do this, let's think about what the cost function actually is.
+To actually train the network, we need to shift our weights and biases based on the result of our cost function. To do this, let's think about what the cost function actually is.
 
-We can think of the neural network as a function that takes all its input activations (in our case, 784 of them) and outputs 10 probabilities of possible results. The cost function takes this neural network as an input, and returns its cost, which is a measure of how inaccurate the network is. We would like to minimize this function to make the network better. Multivariable calculus tells us that we can find the gradient of any differentiable function, including our cost function. We can then move in the negative direction of the gradient to go downwards to find a local minimum in the cost function. In this blog post, we will move down the gradient of our cost function for every training example we pass through the network. This is called **stochastic gradient descent**. This method allows us to calculate the direction in which we want to tweak our weights and biases to minimize the cost function and improve our model. Of course, this doesn't necessarily lead to a global minimum, and our model could get trapped in a suboptimal solution, but that's a problem for another time.
+We can think of the neural network as a function that takes all its input activations (in our case, 784 of them) and outputs 10 probabilities of possible results. The cost function takes this neural network as an input and returns its cost, which is a measure of how inaccurate the network is. We would like to minimize this function to make the network better. Multivariable calculus tells us that we can find the gradient of any point on a differentiable function, which includes our cost function. We can then move in the negative direction of the gradient to go downwards to find a local minimum in the cost function. In this blog post, we will move down the gradient of our cost function for every training example we pass through the network. This is called **stochastic gradient descent**. This method allows us to calculate the direction in which we want to tweak our weights and biases to minimize the cost function and improve our model.
 
-To calculate the gradient of the cost function, we need to find the partial derivative of every input of the function. The cost function $C(\mathbf{a}^L)$ obviously depends explicitly on the activations in the output layer, $\mathbf{a}^L$. However, implicitly, the activations of the output layer depend on its weights and biases, as well as the activations of the second to last layer $L-1$. Furthermore, the activations of the second to last layer, $\mathbf{a}^{L-1}$, depend on the weights and biases in layer $L-1$ as well as the activations of layer $L-2$. So the cost function is an extremely high dimensional function whose inputs are every single weight and bias in the network. We can see this visually by recursively expanding the equation for a single neuron's activation:
+To calculate the gradient of the cost function, we need to find the partial derivative of every input of the function. The cost function $C(\mathbf{a}^L)$ obviously depends explicitly on activations in the output layer, $\mathbf{a}^L$. However, implicitly, the activations of the output layer depend on its weights and biases, as well as the activations of the second to last layer $L-1$. Furthermore, the activations of the second to last layer, $\mathbf{a}^{L-1}$, depend on the weights and biases in layer $L-1$ as well as the activations of layer $L-2$. So the cost function is an extremely high dimensional function whose implicit inputs are every single weight and bias in the network. We can see this visually by recursively expanding the equation for a single neuron's activation:
 
- 
  $$
  C=
  -\ln a^L_i=
@@ -117,7 +117,7 @@ $$
 a_i^L-y_i
 $$
 
-where $y_i$ is the expected value of the $i$th output node, so $y_i=1$ if $i=c$ (the index of the correct digit) and $y_i=0$ otherwise. In code, the partial with respect the the entire vector of preactivations is:
+where $y_i$ is the expected value of the $i$th output node, so $y_i=1$ if $i=c$ (the index of the correct digit) and $y_i=0$ otherwise. In code, the partial with respect to the the entire vector of preactivations is:
 ```python
 target = np.zeros(output_layer.size)
 target[label] = 1
@@ -139,7 +139,7 @@ $$
 a_i^L-y_i
 $$
 
-which happens to be the same as `grad_z`. This means that subtracting our bias by something proportional to this value on every training example will cause a decrease in the output of the cost function. In other words, we are improving our model! But this is only one of many hundreds or thousands of weights and biases that we can tweak to minimize the cost function further. Since we already did the calculations for one bias, let's keep thinking about biases. If you understand the calculation above, it shouldn't be too hard to see that for any layer, the partial derivative of its vector of biases is
+which happens to be the same as `grad_z`. Now we know how to nudge a bias in our last layer to decrease the loss and improve our model! But this is only one of many thousands of weights and biases that we can tweak to minimize the cost function further. Since we already did the calculations for one bias, let's keep thinking about biases. If you understand the calculation above, it shouldn't be too hard to see that for any layer, the partial derivative of the cost with respect to its vector of biases is
 
 $$
 \frac{\partial C}{\partial \mathbf{b}^l}=
@@ -155,16 +155,16 @@ $$
 \frac{\partial C}{\partial \mathbf{z}^{l+1}}\cdot
 \frac{\partial \mathbf{z}^{l+1}}{\partial \mathbf{a}^{l}}\cdot
 \frac{\partial \mathbf{a}^l}{\partial \mathbf{z}^l}=
-\frac{\partial C}{\partial \mathbf{z}^{l+1}}\cdot
-\mathbf{W}^{l+1}\cdot
-\phi'(\mathbf{z}^l)
+\left((\mathbf{W}^{l+1})^T
+\frac{\partial C}{\partial \mathbf{z}^{l+1}}\right)
+\odot\phi'(\mathbf{z}^l)
 $$
 
 ```python
 grad_z = (layer.weights.T @ grad_z) * (prev_layer.preactivation > 0)
 ```
 
-Note that the derivative of ReLU is simply $0$ for negative inputs and $1$ for positive inputs. To see where this comes from, pause and think about the chain rule and partial derivatives, referring back to this formula:
+Note that we transpose the weights matrix to match the dimensions of the vector of partial derivatives of the cost function with respect to preactivations, then multiply element wise with the derivative of the activation function, which for ReLU is simply $0$ for negative inputs and $1$ for positive inputs. To see where this comes from, pause and think about the chain rule and partial derivatives, referring back to this formula:
 
 $$
 \mathbf{a}^l=\phi(\mathbf{W}^l\mathbf{a}^{l-1}+\mathbf{b}^l)
@@ -176,7 +176,7 @@ Now that we have a formula for $\frac{\partial C}{\partial \mathbf{z}^l}$, we ha
 
 $$
 \frac{\partial C}{\partial \mathbf{W}^l}=
-\frac{\partial C}{\partial \mathbf{z}^l}\cdot
+\frac{\partial C}{\partial \mathbf{z}^l}\otimes
 \frac{\partial \mathbf{z}^l}{\partial \mathbf{W}^l}=
 \frac{\partial C}{\partial \mathbf{z}^l}
 \otimes\mathbf{a}^{l-1}
@@ -284,7 +284,7 @@ class NeuralNetwork:
             layer.grad_b = grad_z
 
             if i > 1:
-                grad_z = (grad_z @ layer.weights) * (prev_layer.preactivation > 0)
+                grad_z = (layer.weights.T @ grad_z) * (prev_layer.preactivation > 0)
 
         for i in range(1, len(self.layers)):
             layer = self.layers[i]
@@ -331,9 +331,9 @@ a_c-a_c^2
 $$
 and
 $$
-\frac{\partial C}{\partial z_i}=
+\frac{\partial C}{\partial z_c}=
 \frac{\partial C}{\partial a_c}\cdot
-\frac{\partial a_c}{\partial a_c}=
+\frac{\partial a_c}{\partial z_c}=
 -\frac{1}{a_c}(a_c-a_c^2)=
 a_c-1.
 $$
@@ -345,15 +345,15 @@ $$
 \frac{\partial}{\partial z_i}
 \left(\frac{e^{z_c}}{\sum_j e^{z_j}}\right)=
 \frac{-e^{z_i}e^{z_c}}{\left(\sum_j e^{z_j}\right)^2}=
-\frac{e^{z_i}}{\sum_j e^{z_j}}\cdot\frac{e^{z_c}}{\sum_j e^{z_j}}=
+-\frac{e^{z_i}}{\sum_j e^{z_j}}\cdot\frac{e^{z_c}}{\sum_j e^{z_j}}=
 -a_ia_c
 $$
 and
 $$
 \frac{\partial C}{\partial z_i}=
 \frac{\partial C}{\partial a_c}\cdot
-\frac{\partial a_c}{\partial a_i}=
--\frac{1}{a_c}(a_ia_c)=
+\frac{\partial a_c}{\partial z_i}=
+-\frac{1}{a_c}(-a_ia_c)=
 a_i.
 $$
 

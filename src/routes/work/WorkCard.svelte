@@ -25,7 +25,7 @@
 	{#if image}
 		<img class="logo-corner" src={image} alt="" width="70" />
 	{/if}
-	<h3 class="top-info">{location} | {date}</h3>
+	<h3 class="top-info">{location} — {date}</h3>
 	<h2>{company}</h2>
 	<h3 class="bottom-info">{position}</h3>
 

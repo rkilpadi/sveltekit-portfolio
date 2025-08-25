@@ -1,9 +1,9 @@
-export const html = `<h1>Tarka: A Rudimentary Verification-Aware Lisp Dialect</h1>
+export const html = `<h1>Tarka: A Verification-Aware Lisp Dialect</h1>
 <p>On many occasions, minor bugs in software have cost companies millions of dollars. The current standard for validation in software development is unit testing, which provides evidence that programs work as expected by running through finitely many test cases. But this approach simply tells us that our code works on cases we foresee, and does not provably verify the correctness of code. Instead, we could compile production code to be verified by an SMT (Satisfiability Modulo Theories) solver like <a href="https://github.com/Z3Prover/z3">Z3</a>, thereby achieving mathematically correct code. This is called a <strong>verification condition generator</strong> (VCG).</p>
 <p><a href="https://en.wikipedia.org/wiki/Satisfiability_modulo_theories">SMT</a> generalizes the Boolean Satisfiability Problem (SAT) in order to provide a language that solvers can use to determine the satisfiability of mathematical formulae. There are a few practical (but rarely used outside of academia) programming languages such as <a href="https://github.com/dafny-lang/dafny">Dafny</a> and <a href="https://github.com/FStarLang/FStar">F*</a> that compile their code into a format that is parsed by an SMT solver to ensure their validity. This strategy essentially removes the possibility for software bugs, as long as contracts are correctly specified for the solver. As long as the internals of the language itself has no errors, any software written in it can be rigorously verified in its own native code. These languages allow the user to verify, for example, that an index of an array always remains within its bounds, making any dangerous out-of-bounds errors due to human error impossible.</p>
 <h1>Tarka</h1>
 <p>I implemented a simple verification condition generator for a rudimentary language I am calling Tarka (which means “logic” in Sanskrit). In doing so, I extended a compiler written in OCaml for a toy language that I built in a compilers class. My VCG adds a stage before compilation that converts code written in my language into logical expressions that can be interpreted by the Z3 SMT solver. It allows users to input preconditions and postconditions that will be formally verified. If verification fails, the code will not compile. As long as my VCG and the SMT solver I am using have no flaws, users can definitively prove their assertions. For example, the following Tarka function will verify that the sum of two positive integers is greater than both integers:</p>
-<pre><code>(def (add n : Num m : Num) : Num (
+<pre><code class="hljs language-lisp">(def (add n : Num m : Num) : Num (
 	(requires (> m 0))
 	(requires (> n 0))
 	(ensures (> result  n))
@@ -14,14 +14,14 @@ export const html = `<h1>Tarka: A Rudimentary Verification-Aware Lisp Dialect</h
 </code></pre>
 <p>In order to design the syntax for Tarka, I took inspiration from existing languages such as F* and learned about Hoare logic, which is a formal system for reasoning about the correctness of programs using preconditions and postconditions. In Tarka, the precondition of a function is the logical and of all requires clauses, while the postcondition is the logical and of all ensures clauses. During the verification stage, Tarka checks the satisfiability of the precondition, the function body, and the negation of the postcondition. If the result is unsatisfiable, then verification succeeds, as we have shown that the precondition must imply the postcondition because no counterexample exists. If the result is satisfiable, verification fails, and Tarka gives a counterexample if it can find one.</p>
 <p>SMT solvers are great at checking satisfiability in formulae in <a href="https://en.wikipedia.org/wiki/First-order_logic">first-order logic</a>. But since Tarka is a functional language, most interesting programs rely on recursion. For each recursive call, an inductive hypothesis is added to the solver, using the updated argument expression. For example, consider the following function:</p>
-<pre><code>(def (fibonacci n : Num) : Num (
-  (requires (>= n 0))
-  (ensures (>= result 0))
+<pre><code class="hljs language-lisp">(def (fibonacci n : Num) : Num (
+	(requires (>= n 0))
+	(ensures (>= result 0))
 )
-  (if (&#x3C; n 2)
-  	n
-  	(+ (fibonacci (- n 1)) (fibonacci (- n 2)))
-  )
+	(if (&#x3C; n 2)
+		n
+		(+ (fibonacci (- n 1)) (fibonacci (- n 2)))
+	)
 )
 </code></pre>
 <p>The SMT solver will validate the following Tarka code by checking the satisfiability of everything in the first-order logic example along with two inductive hypotheses. Namely, it will check whether the preconditions <code>(>= (- n 1) 0)</code> and <code>(>= (- n 2) 0)</code> imply the postcondition, that the result is greater than or equal to zero.</p>

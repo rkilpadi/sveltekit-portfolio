@@ -7,16 +7,15 @@
 
 	<div class="card">
         <p>
-            I'm a student software engineer studying mathematics and computer science at Vassar College.
-            I also work at Amazon Web Services in High Performance Computing.
+            I'm a software engineer currently working at Amazon Web Services in High Performance Computing.
+            Before that, I studied mathematics and computer science at Vassar College.
             I love building all sorts of things, including <a href="https://github.com/rkilpadi/sveltekit-portfolio">this website</a> made with Svelte.
         </p>
         <p>
             The background of this website is a <a href="https://en.wikipedia.org/wiki/Perlin_noise">Perlin noise</a> simulation built in p5.js.
-            <br>It inspired <a href="https://flowplane.vercel.app/?dx=cos(x)&dy=y">Flowplane</a>, an interactive web app I made that plots 2D dynamical systems.
+            <br>It inspired <a href="https://flowplane.vercel.app/?dx=cos(x)&dy=y">Flowplane</a>, an interactive web app I made that visualizes 2D dynamical systems.
             <br>Feel free to tinker with the settings below or click to <span class="refresh-button" onclick={refresh}>refresh</span> the animation.
         </p>
-
 
         <div class="sliders">
             <label> Particle Count
